@@ -1,6 +1,6 @@
 # Repositorio equipo "Mentalink"
 
-El siguiente repositorio contiene bibliografía, set de datos, firmware, hardware, imágenes, entre otras cosas, las cuales son necesarias para participar de la Primer competencia de vehículos robóticos controlados por interfaces cerebro computadora a llevarse a cabo en la Ciudad de Fray Bentos, Uruguay entre Noviembre y Diciembre de 2021.
+El siguiente repositorio contiene bibliografía, set de datos, firmware, hardware, imágenes, entre otras cosas, las cuales serán utilizadas para participar de la "Primer competencia de vehículos robóticos controlados por Interfaces Cerebro Computadora" a llevarse a cabo en la Ciudad de Fray Bentos, Uruguay entre Noviembre y Diciembre de 2021.
 
 Aquí deberan volcar toda la información referente al proyecto.
 
