@@ -12,3 +12,4 @@ Aquí deberán volcar todo referente al proyecto.
 - firmware: Se guardará todo lo referente a codificación, como ser Python, C++, entre otros los hubiere.
 - hardware: Se guardará todo lo referente al diseño de placas electrónicas, circuitos, impresiones 3D, etc.
 - exampesCodes: Códigos de ejemplo. Repositorios utilizados como guía, etc.
+- talleres: Ejemplos para los talleres llevados a cabo durante el proyecto
