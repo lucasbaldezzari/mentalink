@@ -1,0 +1,148 @@
+//Librería Wire
+#include "Wire.h"
+//Lib bt 
+#include <SoftwareSerial.h>
+SoftwareSerial BTSerial(12,13);// Definimos los pines RX y TX
+/*Configuracion Modulo BT
+AT
+AT+NAME=Mentalink
+AT+PSWD=0001
+*/
+byte CODEA;
+/* obtencion de datos de sensor la cual queda guardada en "CODEA"
+26= Objeto adelante y atras 
+24= Objeto atras
+22= Objeto adelante
+20= Sin objetos cercanos*/
+char Recepcion=0;
+ /* obtencion de datos Bluet "Recepcion"
+0= no hace nada 
+1= Girar izquierda
+2= Girar derecha
+3= Adelante
+4= Atras*/
+
+//Definimos pines de nuestros motores desde punto 2 hasta 9
+//Motor 1
+int motorPinA2 = 2;//adelante
+int motorPinA3 = 3;//atras
+//Motor 2
+int motorPinA4 = 4;//adelante
+int motorPinA5 = 5;//atras
+//Motor 3
+int motorPinA6 = 6;//atras
+int motorPinA7 = 7;//adelante
+//Motor 4
+int motorPinA8 = 8;//atras
+int motorPinA9 = 9;//adelante
+
+
+void setup()
+ {
+ //Maestro
+ Wire.begin();
+ // conectividad serial
+ Serial.begin(9600);
+  // conectividad bt
+ BTSerial.begin(9600);
+  
+  //definimos nuestros pines como salida
+  pinMode(motorPinA2, OUTPUT);
+  pinMode(motorPinA3, OUTPUT);
+  
+  pinMode(motorPinA4, OUTPUT);
+  pinMode(motorPinA5, OUTPUT);
+  
+  pinMode(motorPinA6, OUTPUT);
+  pinMode(motorPinA7, OUTPUT);
+  
+  pinMode(motorPinA8, OUTPUT);
+  pinMode(motorPinA9, OUTPUT);
+  
+}
+void loop() {
+//si tengo algo distinto de 0 en la entrada de bt entro
+ 
+  /* entrada de bt no esta activado ya que no contamos con el modulo
+  if (BTSerial.available()){ //mientras bt esta activo
+ Recepcion=BTSerial.read();//pasamos a var recepcion datos leidos de bt
+ */
+  
+   Recepcion = 4; //Simulamos entrada de codigo por bt
+  
+  //Giramos izquierda = 1
+  //Giramos derecha = 2
+  //Giramos adelante = 3
+  //Giramos atras = 4
+
+  
+  if (Recepcion > 0 and Recepcion < 5){ //mientras recepcion dea mayor que 0 podemos hacer movimientos
+  
+ //RECOPILA informacion "CODIGO distancia" de esclavo
+ Wire.requestFrom(0x01,1); //identificamos el esclavo
+ while(Wire.available()){ //mientras tengamos conexion
+ CODEA=Wire.read();} //guardamos dentro de var CODEA las distancias
+ 
+    
+    switch (Recepcion) { //Asignamos distintas opciones
+      
+  case 1://Rotar izquierda cuando Recepcion es igual a 1
+		  digitalWrite(motorPinA2, HIGH);
+          digitalWrite(motorPinA4, HIGH);
+          digitalWrite(motorPinA6, HIGH);
+          digitalWrite(motorPinA8, HIGH);
+        delay (500);
+          digitalWrite(motorPinA2, LOW);
+          digitalWrite(motorPinA4, LOW);
+          digitalWrite(motorPinA6, LOW);
+          digitalWrite(motorPinA8, LOW);
+     //codigo motor high
+  break;
+
+  case 2://Rotar derecha cuando Recepcion es igual a 2
+          digitalWrite(motorPinA3, HIGH);
+          digitalWrite(motorPinA5, HIGH);
+          digitalWrite(motorPinA7, HIGH);
+          digitalWrite(motorPinA9, HIGH);
+        delay (500);
+          digitalWrite(motorPinA3, LOW);
+          digitalWrite(motorPinA5, LOW);
+          digitalWrite(motorPinA7, LOW);
+          digitalWrite(motorPinA9, LOW);
+      //codigo motor high
+  break;
+
+  case 3://adelante cuando recepcion es igual a 3
+      if(CODEA!=26 and CODEA!=22){ //si no tengo nada adelanre ni atras sigo
+          digitalWrite(motorPinA2, HIGH);
+          digitalWrite(motorPinA4, HIGH);
+          digitalWrite(motorPinA7, HIGH);
+          digitalWrite(motorPinA9, HIGH);
+        delay (500);
+          digitalWrite(motorPinA2, LOW);
+          digitalWrite(motorPinA4, LOW);
+          digitalWrite(motorPinA7, LOW);
+          digitalWrite(motorPinA9, LOW);
+        //codigo motor high
+        }
+  break;
+    
+  case 4: //atras cuando recepcion es igual a 4
+     if(CODEA!=26 and CODEA!=24){ //si no tengo nada adelanre ni atras sigo
+          digitalWrite(motorPinA3, HIGH);
+          digitalWrite(motorPinA5, HIGH);
+          digitalWrite(motorPinA6, HIGH);
+          digitalWrite(motorPinA8, HIGH);
+        delay (500);
+          digitalWrite(motorPinA3, LOW);
+          digitalWrite(motorPinA5, LOW);
+          digitalWrite(motorPinA6, LOW);
+          digitalWrite(motorPinA8, LOW);
+       //codigo motor high
+        }
+  break;
+		}
+     }
+	Recepcion = 0;
+  }
+}
