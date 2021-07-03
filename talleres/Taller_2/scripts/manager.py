@@ -23,7 +23,7 @@ from utils import plotSpectrum
 from scipy.fftpack import fft, fftfreq
 import scipy.fftpack
 
-path = "E:/reposBCICompetition/BCIC-Personal/Taller_2/scripts/dataset" #directorio donde estan los datos
+path = "E:/reposBCICompetition/Mentalink/talleres/Taller_2/scripts/dataset" #directorio donde estan los datos
 sujetos = [1,2,3,4,5,6,7,8] #sujetos 1 y 2
 
 setSubjects = fa.loadData(path = path, subjects = sujetos)
@@ -85,9 +85,9 @@ plotEEG(eegfiltrado, sujeto = sujeto,
 espectroSujeto = dict()
 
 fftpar = {
-    'resolución': 0.25, #fm/cantidad de muestras
+    'resolución': 0.2930, #fm/cantidad de muestras
     'frecuencia inicio': 0.0,
-    'frecuencia final': 35.0,
+    'frecuencia final': 38.0,
     'fm': 256.0
 } #parámetros importantes para aplicar la FFT
 
