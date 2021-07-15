@@ -218,6 +218,15 @@ frecStimulus = np.array([9.25, 11.25, 13.25,
                          10.25, 12.25, 14.25,
                          10.75, 12.75, 14.75])
 
+"""
+**********************************************************************
+Loading and plotting the EEG
+
+IMPORTANT: In real time BCI, the "loading data" will be replaced
+for real data coming from the OpenBCI board
+**********************************************************************
+"""
+
 rawEEG = fa.loadData(path = path, subjects = subjects)[f"s{subjects[0]}"]["eeg"]
 
 #selec the last 3 trials
@@ -253,6 +262,13 @@ FFT_PARAMS = {
                 'sampling_rate': fm
                 }
 
+"""
+**********************************************************************
+First step: Create CNNClassify object in order to load a trained model
+and classify new data
+**********************************************************************
+"""
+
 # create an CNNClassify object in order to work with magnitud features
 magnitudcomplexCNNClassifier = CNNClassify(modelFile = "CNN_UsingMagnitudFeatures_Subject8",
                            weightFile = "bestWeightss_CNN_UsingMagnitudFeatures_Subject8",
@@ -268,6 +284,13 @@ complexCNNClassifier = CNNClassify(modelFile = "CNN_UsingComplexFeatures_Subject
                            FFT_PARAMS = FFT_PARAMS,
                            classiName = f"CNN_Classifier",
                            frecStimulus = frecStimulus.tolist())
+
+"""
+**********************************************************************
+Second step: Create CNNClassify object in order to load a trained model
+and classify new data
+**********************************************************************
+"""
 
 # get the features for my data
 magnitudFeatures = magnitudcomplexCNNClassifier.computeMSF(data)

@@ -33,6 +33,7 @@ from brainflow.data_filter import DataFilter
 #own packages
 
 from utils import filterEEG, segmentingEEG, computeMagnitudSpectrum, computeComplexSpectrum, plotSpectrum
+from utils import plotEEG
 
 # warnings.filterwarnings('ignore')
 
@@ -373,7 +374,7 @@ def main():
         
         
     import fileAdmin as fa
-                
+            
     actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
     path = os.path.join(actualFolder,"dataset")
     # dataSet = sciio.loadmat(f"{path}/s{subject}.mat")
@@ -387,10 +388,16 @@ def main():
     muestraDescarte = 39
     frecStimulus = np.array([9.25, 11.25, 13.25, 9.75, 11.75, 13.75, 10.25, 12.25, 14.25, 10.75, 12.75, 14.75])
     
+    """
+    **********************************************************************
+    First step: Loading and plotting the EEG
+    **********************************************************************
+    """
+    
+    """Loading the EEG data"""
     rawEEG = fa.loadData(path = path, subjects = subjects)[f"s{subjects[0]}"]["eeg"]
     
-    #Select the first 12 trials
-    
+    #Selecting the first 12 trials
     rawEEG = rawEEG[:, :, :, :12]
     
     samples = rawEEG.shape[2]
@@ -400,47 +407,75 @@ def main():
     rawEEG = rawEEG[:,:, :tiempoTotal ,:]
     
     PRE_PROCES_PARAMS = {
-                    'lfrec': 5.,
-                    'hfrec': 38.,
-                    'order': 4,
-                    'sampling_rate': fm,
-                    'window': 4,
-                    'shiftLen':4
-                    }
+                'lfrec': 5.,
+                'hfrec': 38.,
+                'order': 4,
+                'sampling_rate': fm,
+                'window': 4,
+                'shiftLen':4
+                }
     
     CNN_PARAMS = {
-                    'batch_size': 64,
-                    'epochs': 50,
-                    'droprate': 0.25,
-                    'learning_rate': 0.001,
-                    'lr_decay': 0.0,
-                    'l2_lambda': 0.0001,
-                    'momentum': 0.9,
-                    'kernel_f': 10,
-                    'n_ch': 8,
-                    'num_classes': 12}
+                'batch_size': 64,
+                'epochs': 50,
+                'droprate': 0.25,
+                'learning_rate': 0.001,
+                'lr_decay': 0.0,
+                'l2_lambda': 0.0001,
+                'momentum': 0.9,
+                'kernel_f': 10,
+                'n_ch': 8,
+                'num_classes': 12}
     
     FFT_PARAMS = {
-                    'resolution': resolution,#0.2930,
-                    'start_frequency': 5.0,
-                    'end_frequency': 38.0,
-                    'sampling_rate': fm
-                    }
+                'resolution': resolution,#0.2930,
+                'start_frequency': 5.0,
+                'end_frequency': 38.0,
+                'sampling_rate': fm
+                }
     
+    """Plotting the EEG data"""
     
-    #Make a CNNTrainingModule object in order to use the Magnitude Features of the data
+    title = f"EEG without filter - subjetc {subjects[0]}"
+    plotEEG(signal = rawEEG, sujeto = subjects[0],
+        trial = 3, blanco = 1, window = [0,4], fm = 256.0, save = False, title = title)
+    
+    #filtro la señal entre los 5hz y los 80hz
+    eegfiltrado = filterEEG(rawEEG,
+                        lfrec = PRE_PROCES_PARAMS["lfrec"],
+                        hfrec = PRE_PROCES_PARAMS["hfrec"], orden = 4, fm  = 256.0)
+    
+    title = f"EEG filtered - subjetc {subjects[0]}"
+    
+    plotEEG(eegfiltrado, sujeto = subjects[0],
+        trial = 3, blanco = 1, window = [0,4], fm = 256.0, save = False,
+        title = title)
+    
+    """
+    **********************************************************************
+    Second step: Create the CNN
+    **********************************************************************
+    """
+    
+    #Make a CNNTrainingModule object in order to use the data's Magnitude Features
     magnitudCNN = CNNTrainingModule(rawEEG = rawEEG, subject = subjects[0],
-                                    PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
-                                    FFT_PARAMS = FFT_PARAMS,
-                                    CNN_PARAMS = CNN_PARAMS,
-                                    modelName = f"CNN_UsingMagnitudFeatures_Subject{subjects[0]}")
+                                PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
+                                FFT_PARAMS = FFT_PARAMS,
+                                CNN_PARAMS = CNN_PARAMS,
+                                modelName = f"CNN_UsingMagnitudFeatures_Subject{subjects[0]}")
     
+    
+    """
+    **********************************************************************
+    Third step: Compute and get the Magnitud Spectrum Features
+    **********************************************************************
+    """
     #Computing and getting the magnitude Spectrum Features
     magnitudFeatures = magnitudCNN.computeMSF()
     
     plotSpectrum(magnitudFeatures, resolution, 12, subjects[0], 7, frecStimulus,
-                  startFrecGraph = FFT_PARAMS['start_frequency'],
-                  save = False, title = "", folder = "figs")
+              startFrecGraph = FFT_PARAMS['start_frequency'],
+              save = False, title = "", folder = "figs")
     
     
     # Get the training and testing data for CNN using Magnitud Spectrum Features
@@ -448,20 +483,44 @@ def main():
     
     #inputshape [Number of Channels x Number of Features x 1]
     inputshape = np.array([trainingData_MSF.shape[1], trainingData_MSF.shape[2], trainingData_MSF.shape[3]])
-    #Create the CNN model
+    
+    
+    """
+    **********************************************************************
+    Fourth step: Create the CNN model
+    **********************************************************************
+    """
     magnitudCNN.createModel(inputshape)
-    #Training the CNN model suing the training data
+    
+    """
+    **********************************************************************
+     Fifth step: Trainn the CNN
+    **********************************************************************
+    """
+    
     accu_CNN_using_MSF = magnitudCNN.trainCNN(trainingData_MSF, labels_MSF, nFolds = 10)
     
-    #save the model
+    #saving the model
     magnitudCNN.saveCNNModel()
     
-    """Make a CNNTrainingModule object in order to use the Magnitude and Complex Features of the data"""
+    """
+    **************************************
+             END           
+    **************************************
+    """
+    
+    
+    """
+    **************************************
+    Make the same as before, but now using Magnitud and Complex features from the EEG
+    **************************************
+    """
+    """Make a CNNTrainingModule object in order to use the data's Magnitude and data's Complex Features"""
     complexCNN = CNNTrainingModule(rawEEG = rawEEG, subject = subjects[0],
-                                    PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
-                                    FFT_PARAMS = FFT_PARAMS,
-                                    CNN_PARAMS = CNN_PARAMS,
-                                    modelName = f"CNN_UsingComplexFeatures_Subject{subjects[0]}")
+                                PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
+                                FFT_PARAMS = FFT_PARAMS,
+                                CNN_PARAMS = CNN_PARAMS,
+                                modelName = f"CNN_UsingComplexFeatures_Subject{subjects[0]}")
     
     complexFeatures = complexCNN.computeCSF()
     
@@ -478,9 +537,173 @@ def main():
     
     complexCNN.saveCNNModel()
         
+
+# if __name__ == "__main__":
+#     main()
     
-if __name__ == "__main__":
-    main()
+import fileAdmin as fa
+            
+actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
+path = os.path.join(actualFolder,"dataset")
+# dataSet = sciio.loadmat(f"{path}/s{subject}.mat")
+
+# path = "E:/reposBCICompetition/BCIC-Personal/taller4/scripts/dataset" #directorio donde estan los datos
+
+subjects = [8]
+
+fm = 256.0
+tiempoTotal = int(4*fm) #cantidad de muestras para 4segundos
+muestraDescarte = 39
+frecStimulus = np.array([9.25, 11.25, 13.25, 9.75, 11.75, 13.75, 10.25, 12.25, 14.25, 10.75, 12.75, 14.75])
+
+"""
+**********************************************************************
+First step: Loading and plotting the EEG
+**********************************************************************
+"""
+
+"""Loading the EEG data"""
+rawEEG = fa.loadData(path = path, subjects = subjects)[f"s{subjects[0]}"]["eeg"]
+
+#Selecting the first 12 trials
+rawEEG = rawEEG[:, :, :, :12]
+
+samples = rawEEG.shape[2]
+resolution = fm/samples
+
+rawEEG = rawEEG[:,:, muestraDescarte: ,:]
+rawEEG = rawEEG[:,:, :tiempoTotal ,:]
+
+PRE_PROCES_PARAMS = {
+                'lfrec': 5.,
+                'hfrec': 38.,
+                'order': 4,
+                'sampling_rate': fm,
+                'window': 4,
+                'shiftLen':4
+                }
+
+CNN_PARAMS = {
+                'batch_size': 64,
+                'epochs': 50,
+                'droprate': 0.25,
+                'learning_rate': 0.001,
+                'lr_decay': 0.0,
+                'l2_lambda': 0.0001,
+                'momentum': 0.9,
+                'kernel_f': 10,
+                'n_ch': 8,
+                'num_classes': 12}
+
+FFT_PARAMS = {
+                'resolution': resolution,#0.2930,
+                'start_frequency': 5.0,
+                'end_frequency': 38.0,
+                'sampling_rate': fm
+                }
+
+"""Plotting the EEG data"""
+
+title = f"EEG without filter - subjetc {subjects[0]}"
+plotEEG(signal = rawEEG, sujeto = subjects[0],
+        trial = 3, blanco = 1, window = [0,4], fm = 256.0, save = False, title = title)
+
+#filtro la señal entre los 5hz y los 80hz
+eegfiltrado = filterEEG(rawEEG,
+                        lfrec = PRE_PROCES_PARAMS["lfrec"],
+                        hfrec = PRE_PROCES_PARAMS["hfrec"], orden = 4, fm  = 256.0)
+
+title = f"EEG filtered - subjetc {subjects[0]}"
+
+plotEEG(eegfiltrado, sujeto = subjects[0],
+        trial = 3, blanco = 1, window = [0,4], fm = 256.0, save = False,
+        title = title)
+
+"""
+**********************************************************************
+Second step: Create the CNN
+**********************************************************************
+"""
+
+#Make a CNNTrainingModule object in order to use the data's Magnitude Features
+magnitudCNN = CNNTrainingModule(rawEEG = rawEEG, subject = subjects[0],
+                                PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
+                                FFT_PARAMS = FFT_PARAMS,
+                                CNN_PARAMS = CNN_PARAMS,
+                                modelName = f"CNN_UsingMagnitudFeatures_Subject{subjects[0]}")
+
+
+"""
+**********************************************************************
+Third step: Compute and get the Magnitud Spectrum Features
+**********************************************************************
+"""
+#Computing and getting the magnitude Spectrum Features
+magnitudFeatures = magnitudCNN.computeMSF()
+
+plotSpectrum(magnitudFeatures, resolution, 12, subjects[0], 7, frecStimulus,
+              startFrecGraph = FFT_PARAMS['start_frequency'],
+              save = False, title = "", folder = "figs")
+
+
+# Get the training and testing data for CNN using Magnitud Spectrum Features
+trainingData_MSF, labels_MSF = magnitudCNN.getDataForTraining(magnitudFeatures)
+
+#inputshape [Number of Channels x Number of Features x 1]
+inputshape = np.array([trainingData_MSF.shape[1], trainingData_MSF.shape[2], trainingData_MSF.shape[3]])
+
+
+"""
+**********************************************************************
+Fourth step: Create the CNN model
+**********************************************************************
+"""
+magnitudCNN.createModel(inputshape)
+
+"""
+**********************************************************************
+ Fifth step: Trainn the CNN
+**********************************************************************
+"""
+
+accu_CNN_using_MSF = magnitudCNN.trainCNN(trainingData_MSF, labels_MSF, nFolds = 10)
+
+#saving the model
+magnitudCNN.saveCNNModel()
+
+"""
+**************************************
+             END           
+**************************************
+"""
+
+
+"""
+**************************************
+Make the same as before, but now using Magnitud and Complex features from the EEG
+**************************************
+"""
+"""Make a CNNTrainingModule object in order to use the data's Magnitude and data's Complex Features"""
+complexCNN = CNNTrainingModule(rawEEG = rawEEG, subject = subjects[0],
+                                PRE_PROCES_PARAMS = PRE_PROCES_PARAMS,
+                                FFT_PARAMS = FFT_PARAMS,
+                                CNN_PARAMS = CNN_PARAMS,
+                                modelName = f"CNN_UsingComplexFeatures_Subject{subjects[0]}")
+
+complexFeatures = complexCNN.computeCSF()
+
+# Training and testing CNN suing Complex Spectrum Features
+trainingData_CSF, labels_CSF = complexCNN.getDataForTraining(complexFeatures)
+
+#inputshape [Number of Channels x Number of Features x 1]
+inputshape = np.array([trainingData_CSF.shape[1], trainingData_CSF.shape[2], trainingData_CSF.shape[3]])
+
+# Create the CNN model
+complexCNN.createModel(inputshape)
+
+accu_CNN_using_CSF = complexCNN.trainCNN(trainingData_CSF, labels_CSF, nFolds = 10)
+
+complexCNN.saveCNNModel()
 
 
         
