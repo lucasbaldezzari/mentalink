@@ -1,15 +1,11 @@
-# Repositorio equipo "Mentalink"
+# Repositorio personal para competencia BCI
 
-El siguiente repositorio será utilizado para almacenar bibliografía, set de datos, firmware, hardware, imágenes, entre otras cosas, las cuales utilizarán para lograr el objetivo final de la "Primer competencia de vehículos robóticos controlados por Interfaces Cerebro Computadora" a llevarse a cabo en la Ciudad de Fray Bentos, Uruguay entre Noviembre y Diciembre de 2021.
+El siguiente repositorio será utilizado para almacenar bibliografía, set de datos, firmware, hardware, imágenes, entre otras cosas, las cuales utilizarán para dictar diferentes talleres y ayduar a los equipos a adquirir y procesar señales de EEG para detectar SSVEPs
 
-Aquí deberán volcar todo referente al proyecto.
+## Talleres
 
-## Estructura de directorios propuesta
-
-- _Documentación: Toda la documentación referente al proyecto. Informes, cronogramas, instructivos, etc.
-- data: Datos a utilizar en el proyecto, como ser set de datos.
-- resultados: Aquí guardarán resultados obtenidos durante el proyecto.
-- firmware: Se guardará todo lo referente a codificación, como ser Python, C++, entre otros los hubiere.
-- hardware: Se guardará todo lo referente al diseño de placas electrónicas, circuitos, impresiones 3D, etc.
-- exampesCodes: Códigos de ejemplo. Repositorios utilizados como guía, etc.
-- talleres: Ejemplos para los talleres llevados a cabo durante el proyecto
+- Taller 1: Introducción a las Interfaces Cerebro Computadora
+- Taller 2: Introducción a la adquisición y procesamiento de SSVEP
+- Taller 3: Introducción a Arduino y Robótica
+- Taller 4: Aplicando una CNN para clasificar datos
+- Taller 5: Comunicación entre PC y Arduino mediante Python. Comunicación entre Python y sitio en HTML. Sincronización de estímulos. Comunicación Bluetooth entre arduinos.
