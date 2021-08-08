@@ -29,8 +29,8 @@ class GraphModule(threading.Thread):
         
         threading.Thread.__init__(self)
         
-        pg.setConfigOption('background', '#F8F6F8') #F8F6F8
-        pg.setConfigOption('foreground', '#1C1C1C')
+        pg.setConfigOption('background', '#000000') #F8F6F8
+        pg.setConfigOption('foreground', '#FFFFFF') #1C1C1C  #FF0000 rojo
 
         self.board_id = board_shim.get_board_id()
         self.board_shim = board_shim
@@ -46,7 +46,7 @@ class GraphModule(threading.Thread):
         self.pens = list()
         self.brushes = list()
         #colors = ['#A54E4E', '#A473B6', '#5B45A4', '#2079D2', '#32B798', '#2FA537', '#9DA52F', '#A57E2F', '#A53B2F']
-        colors = ['#838283', '#7D4D8D', '#3E56A5', '#38705D', '#DCB302', '#F86335', '#DA422F', '#C6764E', '#C20664']
+        colors = ['#FF0000', '#7D4D8D', '#3E56A5', '#38705D', '#DCB302', '#F86335', '#DA422F', '#C6764E', '#C20664']
         
         for i in range(len(colors)):
             pen = pg.mkPen({'color': colors[i], 'width': 2})

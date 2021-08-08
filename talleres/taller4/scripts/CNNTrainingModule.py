@@ -344,7 +344,7 @@ class CNNTrainingModule():
                         self.model.save_weights(f'models/bestWeightss_{self.modelName}.h5')
                 
                 accu[fold, :] = actualSscore[1]*100
-                
+            
                 print("%s: %.2f%%" % (self.model.metrics_names[1], actualSscore[1]*100))
                 
             print(f"Mean accuracy for overall folds for subject {self.subject}: {np.mean(accu)}")
