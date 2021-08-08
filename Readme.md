@@ -4,8 +4,8 @@ El siguiente repositorio será utilizado para almacenar bibliografía, set de da
 
 ## Talleres
 
-- Taller 1: Introducción a las Interfaces Cerebro Computadora
-- Taller 2: Introducción a la adquisición y procesamiento de SSVEP
-- Taller 3: Introducción a Arduino y Robótica
-- Taller 4: Aplicando una CNN para clasificar datos
-- Taller 5: Comunicación entre PC y Arduino mediante Python. Comunicación entre Python y sitio en HTML. Sincronización de estímulos. Comunicación Bluetooth entre arduinos.
+- [x] Taller 1: Introducción a las Interfaces Cerebro Computadora
+- [x] Taller 2: Introducción a la adquisición y procesamiento de SSVEP
+- [x] Taller 3: Introducción a Arduino y Robótica
+- [x] Taller 4: Aplicando una CNN para clasificar datos
+- [ ] Taller 5: Comunicación entre PC y Arduino mediante Python. Comunicación entre Python y sitio en HTML. Sincronización de estímulos. Comunicación Bluetooth entre arduinos.
