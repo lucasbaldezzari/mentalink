@@ -72,7 +72,6 @@ def main():
     board_shim.start_stream(450000, args.streamer_params)
     
     data_thread = DT(board_shim, args.board_id)
-    print("a")
     graph = Graph(board_shim) 
 
     try:
@@ -94,6 +93,7 @@ def main():
         if board_shim.is_prepared():
             logging.info('Releasing session')
             board_shim.release_session()
+
 
 if __name__ == "__main__":
         main()
