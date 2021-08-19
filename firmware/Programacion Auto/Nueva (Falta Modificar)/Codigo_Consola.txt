@@ -1,0 +1,273 @@
+/ C++ code
+// Falta añadir zonas del codigo las cuales necesitan tener el dispositivo BlueTooth conectado
+// para poder testear su correcto funcionamient
+// ademas el codigo no esta completo. Cuando lo esté sera actualizado en el github
+
+#include <SoftwareSerial.h>
+SoftwareSerial BTSerial(0,1);// Definimos los pines RX y TX
+
+byte modes_and_values[10][3]={
+  {2,18,50},
+  {3,15,50},
+  {4,13,50},
+  {5,10,50},
+  {6,8,50},
+  {7,6,50},
+  {8,3,50},
+  {},
+  {},
+  {}};
+
+int mode=-1;
+int numerodemodos=7;
+
+
+long case1= 0;int _case1 =(numerodemodos+1);int dcase1=0;int delcase1=100;
+ bool l1 = false; long _l1 =0; int dl1 =0;
+ bool l2 = false; long _l2 =0; int dl2 =0;
+ bool l3 = false; long _l3 =0; int dl3 =0;
+ bool l4 = false; long _l4 =0; int dl4 =0;
+ bool l5 = false; long _l5 =0; int dl5 =0;
+ bool l6 = false; long _l6 =0; int dl6 =0;
+ bool l7 = false; long _l7 =0; int dl7 =0;
+ bool l8 = false; long _l8 =0; int dl8 =0;
+ bool l9 = false; long _l9 =0; int dl9 =0;
+bool l10 = false;long _l10 =0;int dl10 =0;
+
+void setup()
+{
+  for(int i=2;i<12;i++){
+  	pinMode(i,OUTPUT);
+  }
+  Serial.begin(9600);
+// BT.begin(9600);
+}
+
+void loop()
+{
+  switch(mode){
+    case -1:{
+      	
+    	long actual=millis();
+     
+      	dcase1+=actual-case1; 
+      	case1=actual;
+      if(dcase1>delcase1){
+        dcase1=0;
+        digitalWrite(_case1,LOW);
+        if(_case1==numerodemodos+1){_case1=2;}else{_case1++;}
+        digitalWrite(_case1,HIGH);
+      }
+    }break;
+    case 0:{
+      long actual=millis();
+      if(modes_and_values[0][0]!=0){
+        if(l1){
+        if(dl1> modes_and_values[0][2]){
+        	dl1=0;
+          	l1=false;
+          	_l1=actual;
+          	digitalWrite(modes_and_values[0][0],l1);
+        }
+        dl1+=actual-_l1;
+      }else if(dl1> 1000/modes_and_values[0][1]){
+      		dl1=0;
+          	l1=true;
+          	_l1=actual;
+          	digitalWrite(modes_and_values[0][0],l1);
+      }else{
+        dl1+=actual-_l1;
+      	_l1=actual;
+      }
+          }
+      if(modes_and_values[1][0]!=0){
+      if(l2){
+        if(dl2> modes_and_values[1][2]){
+        	dl2=0;
+          	l2=false;
+          	_l2=actual;
+          	digitalWrite(modes_and_values[1][0],l2);
+        }
+        dl2+=actual-_l2;
+      }else if(dl2> 1000/modes_and_values[1][1]){
+      		dl2=0;
+          	l2=true;
+          	_l2=actual;
+          	digitalWrite(modes_and_values[1][0],l2);
+      }else{
+        dl2+=actual-_l2;
+      	_l2=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[2][0]!=0){
+      if(l3){
+        if(dl3> modes_and_values[2][2]){
+        	dl3=0;
+          	l3=false;
+          	_l3=actual;
+          	digitalWrite(modes_and_values[2][0],l3);
+        }
+        dl3+=actual-_l3;
+      }else if(dl3> 1000/modes_and_values[2][1]){
+      		dl3=0;
+          	l3=true;
+          	_l3=actual;
+          	digitalWrite(modes_and_values[2][0],l3);
+      }else{
+        dl3+=actual-_l3;
+      	_l3=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[3][0]!=0){
+      if(l4){
+        if(dl4> modes_and_values[3][2]){
+        	dl4=0;
+          	l4=false;
+          	_l4=actual;
+          	digitalWrite(modes_and_values[3][0],l4);
+        }
+        dl4+=actual-_l4;
+      }else if(dl4> 1000/modes_and_values[3][1]){
+      		dl4=0;
+          	l4=true;
+          	_l4=actual;
+          	digitalWrite(modes_and_values[3][0],l4);
+      }else{
+        dl4+=actual-_l4;
+      	_l4=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[4][0]!=0){
+      if(l5){
+        if(dl5> modes_and_values[4][2]){
+        	dl5=0;
+          	l5=false;
+          	_l5=actual;
+          	digitalWrite(modes_and_values[4][0],l5);
+        }
+        dl5+=actual-_l5;
+      }else if(dl5> 1000/modes_and_values[4][1]){
+      		dl5=0;
+          	l5=true;
+          	_l5=actual;
+          	digitalWrite(modes_and_values[4][0],l5);
+      }else{
+        dl5+=actual-_l5;
+      	_l5=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[5][0]!=0){
+      if(l6){
+        if(dl6> modes_and_values[5][2]){
+        	dl6=0;
+          	l6=false;
+          	_l6=actual;
+          	digitalWrite(modes_and_values[5][0],l6);
+        }
+        dl6+=actual-_l6;
+      }else if(dl6> 1000/modes_and_values[5][1]){
+      		dl6=0;
+          	l6=true;
+          	_l6=actual;
+          	digitalWrite(modes_and_values[5][0],l6);
+      }else{
+        dl6+=actual-_l6;
+      	_l6=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[6][0]!=0){
+      if(l7){
+        if(dl7> modes_and_values[6][2]){
+        	dl7=0;
+          	l7=false;
+          	_l7=actual;
+          	digitalWrite(modes_and_values[6][0],l7);
+        }
+        dl7+=actual-_l7;
+      }else if(dl7> 1000/modes_and_values[6][1]){
+      		dl7=0;
+          	l7=true;
+          	_l7=actual;
+          	digitalWrite(modes_and_values[6][0],l7);
+      }else{
+        dl7+=actual-_l7;
+      	_l7=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[7][0]!=0){
+      if(l8){
+        if(dl8> modes_and_values[7][2]){
+        	dl8=0;
+          	l8=false;
+          	_l8=actual;
+          	digitalWrite(modes_and_values[7][0],l8);
+        }
+        dl8+=actual-_l8;
+      }else if(dl2> 1000/modes_and_values[7][1]){
+      		dl8=0;
+          	l8=true;
+          	_l8=actual;
+          	digitalWrite(modes_and_values[7][0],l8);
+      }else{
+        dl8+=actual-_l8;
+      	_l8=actual;
+      }
+      } 
+//***********************************************************************
+      
+       if(modes_and_values[8][0]!=0){
+      if(l9){
+        if(dl9> modes_and_values[8][2]){
+        	dl9=0;
+          	l9=false;
+          	_l9=actual;
+          	digitalWrite(modes_and_values[8][0],l9);
+        }
+        dl9+=actual-_l9;
+      }else if(dl9> 1000/modes_and_values[8][1]){
+      		dl9=0;
+          	l9=true;
+          	_l9=actual;
+          	digitalWrite(modes_and_values[8][0],l9);
+      }else{
+        dl9+=actual-_l9;
+      	_l9=actual;
+      }
+      } 
+//***********************************************************************
+      if(modes_and_values[9][0]!=0){
+      if(l10){
+        if(dl10> modes_and_values[9][2]){
+        	dl10=0;
+          	l10=false;
+          	_l10=actual;
+          	digitalWrite(modes_and_values[9][0],l10);
+        }
+        dl1+=actual-_l1;
+      }else if(dl10> 1000/modes_and_values[9][1]){
+      		dl10=0;
+          	l10=true;
+          	_l10=actual;
+          	digitalWrite(modes_and_values[9][0],l10);
+      }else{
+        dl10+=actual-_l10;
+      	_l10=actual;
+      }
+      } 
+//***********************************************************************
+       
+    }
+  }
+}

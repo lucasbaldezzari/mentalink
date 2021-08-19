@@ -1,0 +1,339 @@
+/*
+	El codigo esta en modificacion para que pueda "Sincronizarse"
+	con todos los modulos
+	
+	la ultima modificacion se realizo hace un tiempo y no
+	puedo asegurar que este codigo cumpla el 100% de sus fuciones
+
+	Mas adelante cuando este completo sera actualizado enn el github
+ */
+#include "Wire.h" 
+const int trigPinAdelante = 2;
+const int echoPinAdelante = 3;
+const int trigPinAtras = 4;
+const int echoPinAtras = 5;
+
+const int Key_Cambiar_Modo = 200;
+const int Key_Confirmar_Modo = 201;
+const int Key_Agregar_Modo = 225;
+const int Key_Confirmar_Variable=226;
+const int Error_code =0;
+
+volatile bool Cambiando_Modo=false;
+volatile bool Agregando_Modo=false;
+volatile bool Target_Modo_seleccionado=false;
+volatile int  Target=0;
+volatile bool Modo_keycode_annadida=false;
+volatile int  keycode=0;
+volatile bool Modo_variable_val_annadido=false;
+volatile int  variable=0;
+volatile byte active=0;
+volatile bool Pidiendo_Modo=false;
+volatile int  Modo_Solicitado=0;
+volatile bool Pidiendo_Modo_Val=false;
+volatile byte ModoOff_V=0;
+volatile byte Modo0ff[2]={0,0};
+volatile int ModoDebug_V=0;
+volatile bool Enviado_1=false;
+volatile bool Enviado_2=false;
+volatile bool Enviado_3=false;
+
+
+volatile byte ModoDebug[2]={1,1};
+//*******************************/
+
+
+//*******************************/
+volatile int ModoAdelante_V=0;
+volatile byte ModoAdelante[2]={2,0};
+
+volatile int ModoAtras_V=0;
+volatile byte ModoAtras[2]={3,0};
+
+volatile int ModoGirando_V=0;
+volatile byte ModoGirando[2]={4,0};
+//********************************/
+
+volatile bool Error_Ocurred=false;
+
+volatile byte Modo = 0;
+
+byte entra=0; //Valor de entrada
+byte CODE; //distancia del objeto y envio
+int suma =0;
+
+void setup() {
+ 	//CODIGO esclavo
+  	Serial.begin(9600);
+ 	Wire.begin(0x01); //identifico como esclavo 1
+ 	Wire.onReceive( receiveEvent); //Declaro Evento
+ 	Wire.onRequest(Peticion); //Declaro Evento
+    
+}
+
+void loop() {
+      if (Modo== 0){Serial.println("I am here");Reset();}
+      /*if (Modo== 1){Serial.println("0");}
+      if (Modo== ModoAdelante[0]){Serial.println("1");}
+      if (Modo== ModoAtras[0]){Serial.println("2");}
+      if (Modo== ModoGirando[0]){Serial.println("3");}*/
+	
+
+}
+void Reset(){
+    Wire.endTransmission();
+
+	Serial.println("Reset");
+    Cambiando_Modo=false;
+    Agregando_Modo=false;
+    Target_Modo_seleccionado=false;
+    Target=0;
+    Modo_keycode_annadida=false;
+    keycode=0;
+    Modo_variable_val_annadido=false;
+    variable=0;
+    active=0;
+    Pidiendo_Modo=false;
+    Modo_Solicitado=0;
+    Pidiendo_Modo_Val=false;
+    
+    ModoAdelante_V=0;
+    ModoAdelante[0]=0;
+	ModoAdelante[1]=0;
+  
+    ModoAtras_V=0;
+    ModoAtras[0]=0;
+	ModoAtras[1]=0;
+
+    ModoGirando_V=0;
+    ModoGirando[0]=0;
+    ModoGirando[1]=0;
+    Modo =1;Wire.begin(0x01); //identifico como esclavo 1
+ 	Wire.onReceive( receiveEvent); //Declaro Evento
+ 	Wire.onRequest(Peticion); //Declaro Evento
+}
+
+void receiveEvent(int bytes){
+    byte data = 0;
+    uint8_t index = 0;
+    while (Wire.available()){
+        byte* pointer = (byte*)&data;
+        *(pointer + index) = (byte)Wire.read();
+        index++;
+    }
+
+    if(Cambiando_Modo){
+        if(
+        data ==ModoGirando[0]||
+        data ==ModoAtras[0]||
+        data ==ModoAdelante[0]||
+        data ==1 ||data==0
+        ){
+        Modo=data;
+        Cambiando_Modo=false;
+        Error_Ocurred=false;
+        }
+        else{
+            Error_Ocurred=true;
+            Cambiando_Modo=false;
+        }
+    }
+    else if(Agregando_Modo){
+        if(Error_Ocurred){
+            Target=0;
+            Target_Modo_seleccionado=false;
+            keycode=0;
+            Modo_keycode_annadida=false;
+            variable=0;
+            Modo_variable_val_annadido=false;
+            active=0;
+          Agregando_Modo=false;
+        }
+        else if(Target_Modo_seleccionado){
+            if(Modo_keycode_annadida){
+                if(Modo_variable_val_annadido){
+                    
+                        if(data==1||data==0){
+                            active=data;
+                            switch(Target){
+                                case 2:Change_Adelante(keycode,variable,active);break;
+                                case 3:Change_Atras(keycode,variable,active);break;
+                                case 4:Change_Girando(keycode,variable,active);break;
+                            }
+                            Agregando_Modo=false;
+                            Target=0;
+                            Target_Modo_seleccionado=false;
+                            keycode=0;
+                            Modo_keycode_annadida=false;
+                            variable=0;
+                            Modo_variable_val_annadido=false;
+                            active=0;
+                            Error_Ocurred=false;
+                        }else{
+                          Agregando_Modo=false;
+                            Error_Ocurred=true;
+                        }
+                    
+                }else{
+                    variable=data;
+                    Modo_variable_val_annadido=true;
+                }
+            }else{
+                if(
+                    data !=ModoGirando[0] and
+                    data !=ModoAtras[0] and
+                    data !=ModoAdelante[0] and
+                    data !=1 and data!=0
+                ){
+                    keycode=data;
+                    Modo_keycode_annadida=true;
+                    Error_Ocurred=false;
+                }else{
+                  if(data==get_Keycode(Target)){
+                  	keycode=data;
+                    Modo_keycode_annadida=true;
+                    Error_Ocurred=false;
+                  }else{
+                    	Error_Ocurred=true;
+                  }
+                }
+            }
+        }else{
+            if(data >1 and data<5){
+                Target=data;
+                Target_Modo_seleccionado=true;
+                Error_Ocurred=false;
+            }else{
+                Error_Ocurred=true;
+                Target_Modo_seleccionado=false;
+            }
+        
+        }
+    }
+    else if(Pidiendo_Modo ){
+        if(
+        data ==ModoGirando[0]||
+        data ==ModoAtras[0]||
+        data ==ModoAdelante[0]||
+        data ==1 ||data==0||data==5
+        ){
+        Modo_Solicitado=data;
+          Serial.println(data);
+        }else{Pidiendo_Modo=false;}
+    }
+    
+    else {
+        switch(data){
+            case Key_Cambiar_Modo:Cambiando_Modo=true;break;
+            case Key_Confirmar_Modo:Pidiendo_Modo=true;break;
+            case Key_Agregar_Modo:Agregando_Modo=true;break;
+            case Key_Confirmar_Variable:Pidiendo_Modo_Val=true;break;
+        }
+    }
+  
+}
+void Peticion(){
+    if(Error_Ocurred){
+        Wire.write(0); 
+        Error_Ocurred=false;
+      	
+    }else{
+      
+        if(Pidiendo_Modo){
+          if(Modo_Solicitado==ModoAdelante[0]){
+          	if(Enviado_1){if(Enviado_2){Wire.write(ModoAdelante[0]);Enviado_1=false;Enviado_2=false;}else{Wire.write(ModoAdelante_V);Enviado_2=true;}}else{Wire.write(ModoAdelante[1]);Enviado_1=true;}
+          }else if(Modo_Solicitado==ModoAtras[0]){
+          	if(Enviado_1){if(Enviado_2){Wire.write(ModoAtras[1]);Enviado_1=false;Enviado_2=false;}else{Wire.write(ModoAtras_V);Enviado_2=true;}}else{Wire.write(ModoAtras[0]);Enviado_1=true;}
+          }else if(Modo_Solicitado==ModoGirando[0]){
+            if(Enviado_1){if(Enviado_2){Wire.write(ModoGirando[1]);Enviado_1=false;Enviado_2=false;}else{Wire.write(ModoGirando_V);Enviado_2=true;}}else{Wire.write(ModoGirando[0]);Enviado_1=true;}
+          }else switch(Modo_Solicitado){
+                case 0:Wire.write(0);
+                case 1:Wire.write(1);
+              	case 5:Wire.write(Modo);Serial.println(Modo);break;
+                default:Error_Ocurred=true;
+            }
+          	if(!Enviado_1 and !Enviado_2 and !Enviado_3){
+            	Modo_Solicitado=0;
+            	Pidiendo_Modo=false;
+          	}
+          
+        }else if(Pidiendo_Modo_Val){
+          	if(Modo==0){Wire.write(0);}
+            if(Modo==1){Wire.write(0);}
+            if(Modo==ModoAdelante[0]){Wire.write(ModoAdelante_V);}
+          	if(Modo==ModoAtras[0]){Wire.write(ModoAtras_V);}
+          	if(Modo==ModoGirando[0]){Wire.write(ModoGirando_V);}
+          	Pidiendo_Modo_Val=false;
+        }
+
+    }
+    
+}
+void Change_Adelante(int key, int val, byte active){
+    ModoAdelante_V=val;
+	ModoAdelante[0]=key;
+  	ModoAdelante[1]=active;
+}
+void Change_Atras(int key, int val, byte active){
+    ModoAtras_V=val;
+	ModoAtras[0]=key;
+  	ModoAtras[1]=active;
+}
+void Change_Girando(int key, int val, byte active){
+    ModoGirando_V=val;
+    ModoGirando[0]=key;
+  	ModoGirando[1]=active;
+}
+byte get_Keycode(int target){
+  	switch(target){
+  		case 0:return 0;
+      	case 1:return 1;
+      	case 2:return ModoAdelante[0];
+      	case 3:return ModoAtras[0];
+      	case 4:return ModoGirando[0];
+      	default:Error_Ocurred=true;return 0;
+    }
+
+}
+
+//******************************************************************************************************
+//			Codigo Basura
+//*******************************************************************************************************
+
+/*
+void Analizar_Distanca(){
+long tinicial = millis();
+  //activamos un pulso en el sensor delantero y recopilamos
+
+  //activamos un pulso en el sensor atras y recopilamos
+  
+  
+  //en caso de tener un objeto a menos de 40cm obtenemos un valor
+  
+  
+  
+  //en caso de tener un objeto a menos de 40cm obtenemos un valor
+  if  (distanciatras <= 40){
+    CODEAtras=14;
+  }else{
+    CODEAtras=10;
+  }
+  
+  //La variable suma es parte de la familia y se 
+  //quedara para siempre
+  //el que la borre queda eliminado del equipo
+  //y no se reconocera su trabajo
+  if(suma != CODEAtras+CODEAdelante){
+    suma= CODEAtras+CODEAdelante;
+  	CODE =suma;
+    digitalWrite(12,HIGH); 
+    digitalWrite(12,LOW);
+  }else{suma= CODEAtras+CODEAdelante;}
+  
+  CODE =suma;
+  long tfinal = millis();
+  Serial.println(tfinal-tinicial);
+}
+void Analizar_Rotacion(){
+
+}*/
