@@ -1,0 +1,19 @@
+name: taller6
+channels:
+- defaults
+dependencies:
+- python>=3.7
+- pip
+- pip:
+  - keyboard
+  - numpy
+  - pandas
+  - PyQt6
+  - PySide6
+  - scipy
+  - matplotlib
+  - scikit-learn
+  - brainflow
+  - pyqtgraph 
+  - tensorflow
+  - Pyserial
