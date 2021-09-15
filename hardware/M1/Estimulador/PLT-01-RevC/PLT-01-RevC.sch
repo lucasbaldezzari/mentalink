@@ -4363,6 +4363,7 @@ Big oval pads</description>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
+<part name="JP25" library="pinhead" deviceset="PINHD-1X2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -4431,6 +4432,7 @@ Big oval pads</description>
 <instance part="GND1" gate="1" x="-93.98" y="60.96" rot="R270"/>
 <instance part="GND3" gate="1" x="55.88" y="81.28" rot="R180"/>
 <instance part="GND4" gate="1" x="114.3" y="91.44" rot="R90"/>
+<instance part="JP25" gate="G$1" x="76.2" y="121.92" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -4638,6 +4640,11 @@ Big oval pads</description>
 <wire x1="76.2" y1="93.98" x2="76.2" y2="99.06" width="0.1524" layer="91"/>
 <pinref part="T6" gate="G$1" pin="C"/>
 <wire x1="30.48" y1="71.12" x2="22.86" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="JP25" gate="G$1" pin="2"/>
+<wire x1="78.74" y1="121.92" x2="78.74" y2="127" width="0.1524" layer="91"/>
+<junction x="78.74" y="127"/>
 </segment>
 </net>
 <net name="N$11" class="0">
@@ -4899,17 +4906,11 @@ Big oval pads</description>
 <label x="96.52" y="12.7" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="EN" class="0">
+<net name="N$6" class="0">
 <segment>
 <pinref part="JP9" gate="A" pin="6"/>
-<wire x1="78.74" y1="99.06" x2="78.74" y2="106.68" width="0.1524" layer="91"/>
-<junction x="78.74" y="106.68"/>
-<label x="78.74" y="104.14" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="JP10" gate="A" pin="1"/>
-<wire x1="71.12" y1="71.12" x2="71.12" y2="78.74" width="0.1524" layer="91"/>
-<junction x="71.12" y="78.74"/>
+<pinref part="JP25" gate="G$1" pin="1"/>
+<wire x1="78.74" y1="99.06" x2="78.74" y2="119.38" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
