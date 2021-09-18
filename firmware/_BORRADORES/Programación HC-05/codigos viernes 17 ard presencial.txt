@@ -1,0 +1,131 @@
+98D3,51,F5C607
+
+
+   if(DATO=='0'){
+    digitalWrite(led,LOW);
+    Serial.println("off");
+   }
+   if(DATO=='1'){
+    digitalWrite(led,HIGH);
+    Serial.println("on");
+   }
+
+#include<SoftwareSerial.h>
+SoftwareSerial mySerial(10, 11);// son los pines de // RX, TX
+int led = 13;
+int DATO=0;
+
+void setup(){
+  pinMode(led,OUTPUT);
+  digitalWrite(led,LOW);
+  Serial.begin(9600);
+  }
+
+void loop() {
+  if(mySerial.available()>0){
+    DATO=mySerial.read();
+    digitalWrite(led,HIGH);
+    
+  }
+}
+
+configuracion
+
+#include<SoftwareSerial.h>
+SoftwareSerial mySerial(10, 11);// son los pines de // RX, TX
+
+
+
+void setup() {
+  Serial.begin(9600);//comunicacion al pc
+  mySerial.begin(38400);//comunicacion al BT
+  Serial.println("configuracion BT");//MENSAJE
+  
+}
+
+void loop() {
+  //EN ESTA PARTE TODO LO QUE ESCRIBA SE VISUALIZA EN EL MONITOR SERIAL
+  if(mySerial.available())
+      Serial.write(mySerial.read());
+   if(Serial.available())
+    mySerial.write(Serial.read());
+//EN MONITOR SERIAL SE DEBE COLOCAR CR+LF
+}
+
+Esclavo recive
+#include<SoftwareSerial.h>
+SoftwareSerial BTEsclavo(10,11);
+
+int led = 13;
+int DATO=0;
+
+void setup(){
+  pinMode(led,OUTPUT);
+  digitalWrite(led,0);
+  Serial.begin(9600);
+  BTEsclavo.begin(9600);
+  delay(100);
+  BTEsclavo.listen();
+  delay(100);
+  }
+
+void loop() 
+  {
+    //if(BTEsclavo.isListening()) digitalWrite(led,1);
+  if(BTEsclavo.available())
+  {
+    DATO=BTEsclavo.read();
+    if (DATO == '1') digitalWrite(led,1);
+    if (DATO == '0') digitalWrite(led,0);
+    //Serial.println(DATO);
+    }
+    
+//   if(DATO=='0'){
+//    digitalWrite(led,LOW);
+//    Serial.println("OF");
+//   }
+//   if(DATO=='1'){
+//    digitalWrite(led,HIGH);
+//    Serial.println("OF");
+//   }
+  }
+
+
+
+PRUEBAS MAESTRO ESCLAVO
+#include<SoftwareSerial.h>
+SoftwareSerial BTEsclavo(10,11);
+
+int led = 3;
+int DATO=0;
+
+void setup(){
+  pinMode(led,OUTPUT);
+  digitalWrite(led,0);
+  Serial.begin(9600);
+  BTEsclavo.begin(9600);
+  delay(100);
+  BTEsclavo.listen();
+  delay(100);
+  }
+
+void loop() 
+  {
+    //if(BTEsclavo.isListening()) digitalWrite(led,1);
+  if(BTEsclavo.available())
+  {
+    DATO=BTEsclavo.read();
+    if (DATO == '1') digitalWrite(led,1);
+    if (DATO == '0') digitalWrite(led,0);
+    //Serial.println(DATO);
+    }
+    
+//   if(DATO=='0'){
+//    digitalWrite(led,LOW);
+//    Serial.println("OF");
+//   }
+//   if(DATO=='1'){
+//    digitalWrite(led,HIGH);
+//    Serial.println("OF");
+//   }
+  }
