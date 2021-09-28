@@ -121,11 +121,11 @@ ISR(TIMER0_COMPA_vect)//Rutina interrupción Timer0.
     digitalWrite(LEDTesteo,1);
   }
 
-  if(1) //para simular que tenemos un mensaje por bluetooth
-  //if(BT.available()) //Si tenemos un mensaje por bluetooth lo leemos
+  //if(1) //para simular que tenemos un mensaje por bluetooth
+  if(BT.available()) //Si tenemos un mensaje por bluetooth lo leemos
   {
-      byte mensajeBT = 0b00000011; //simulamos un obstaculo adelante y a la izquierda
-    checkBTMessage(mensajeBT);
+      byte mensajeBT = BT.read(); //simulamos un obstaculo adelante y a la izquierda
+      checkBTMessage(mensajeBT);
   }
 };
 
