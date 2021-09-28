@@ -73,7 +73,7 @@ int trialNumber = 1;
 ******************************************************************/
 
 char movimiento = 0; //Robot en STOP
-
+char backMensaje = 0;
 /******************************************************************
   Bluetooth
 ******************************************************************/
@@ -120,13 +120,12 @@ ISR(TIMER0_COMPA_vect)//Rutina interrupción Timer0.
     digitalWrite(estimDer,0);
     digitalWrite(LEDTesteo,1);
   }
-
-  if(1) //para simular que tenemos un mensaje por bluetooth
-  //if(BT.available()) //Si tenemos un mensaje por bluetooth lo leemos
-  {
-      byte mensajeBT = 0b00000011; //simulamos un obstaculo adelante y a la izquierda
-    checkBTMessage(mensajeBT);
-  }
+//
+//  if(BT.available()) //Si tenemos un mensaje por bluetooth lo leemos
+//  {
+//    backMensaje = BT.read();
+//    checkBTMessage(backMensaje);
+//  }
 };
 
 void stimuliControl()
@@ -135,11 +134,11 @@ void stimuliControl()
   switch(stimuli)
   {
     case ON:
-    //control estímulo izquierdo
+    //control estímulo izquierda
       if (++acumEstimIzq >= estimIzqMaxValue)
       {
         estimIzqON = !estimIzqON;
-        digitalWrite(estimIzq,estimIzqON);
+        if ((backMensaje&0b00100000) == 0b00100000) digitalWrite(estimIzq,0);
         acumEstimIzq = 0; 
       } 
 
@@ -199,18 +198,9 @@ void checkSerialMessage(char val)
   }
 };
 
-void checkBTMessage(char val)
-{
-  //Actualizmaos el estado interno del robot
-  if((val>>0)&0b00000001 == 1) robotStatus[FORWARD_INDEX] = OBSTACULO_DETECTADO;
-  else robotStatus[FORWARD_INDEX] = SIN_OBSTACULO;
-
-  if((val>>1)&0b00000001 == 1) robotStatus[LEFT_INDEX] = OBSTACULO_DETECTADO;
-  else robotStatus[LEFT_INDEX] = SIN_OBSTACULO;
-
-  if((val>>2)&0b00000001 == 1) robotStatus[RIGHT_INDEX] = OBSTACULO_DETECTADO;
-  else robotStatus[RIGHT_INDEX] = SIN_OBSTACULO;
-}
+//void checkBTMessage(char val)
+//{
+//}
 
 
 /*
@@ -227,4 +217,5 @@ void sendMensajeBT()
     
     byte mensaje = (incDataFromPC[0])|(incDataFromPC[1]<<1)|(incDataFromPC[2]<<2);//Armamos el byte
     BT.write(mensaje); //enviamos byte por bluetooth
+    
 }
