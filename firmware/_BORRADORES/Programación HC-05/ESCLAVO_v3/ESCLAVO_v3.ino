@@ -40,7 +40,7 @@ int SESSION = 13;
 
 byte DATO = 0;
 
-SoftwareSerial BTEsclavo(11, 10);// son los pines de // RX, TX conectados a arduino
+SoftwareSerial BTEsclavo(10, 11);// son los pines de // RX, TX conectados a arduino
 
 void setup(){
   pinMode(Detenido,OUTPUT);
@@ -64,49 +64,25 @@ void loop()
   if(BTEsclavo.available());
   {
     DATO=BTEsclavo.read();
-    checkMessage(DATO);
-    }  
-   }
+    Control(DATO);
+    }
+  }  
 
-void checkMessage(byte val)
+void Movimiento(byte val)
 {
-  incDataFromPC[bufferIndex] = val;
-  switch(bufferIndex)
+  switch(val)
   {
-      case 0:
-        pinMode(SESSION, 1);
-//      if (incDataFromPC[bufferIndex] == 1) pinMode(SESSION, 1);
-//      else pinMode(SESSION, 0); 
-//      digitalWrite(LEDTesteo,0);
-      //else sessionState = STOP;
-      break;
-//      
-//    case 1:
-//      if (incDataFromPC[bufferIndex] == 1) stimuli = ON; //debe detener el vehículo porque se está estimulando 
-//      else stimuli = OFF; //se ha detectado un estimulo por lo que se deberá mover el auto, o no si no se clasificó ninguno
-//      //Si el vehiculo se esta moviendo entonces a partir del timer se deben revisar los ultrasonidos, si se detecta algo cerca parar el auto
-//      //y enviar un mensaje por comunicación. Tambien enviar por comunicación cuando termine de moverse y si el vehiculo no puede terminar su trayecto apagar led de estimulo o que no oscile
-//      //else sessionState = STOP;
+//    case 0b00000000: 
+//      digitalWrite(Detenido, 1);
 //      break;
-
-    case 2: //indica hacia donde se debe mover el vehículo
-      Movimiento(incDataFromPC[bufferIndex]);
-      break;          
-  }
-    bufferIndex++;
-  if (bufferIndex >= inBuffDataFromPC) bufferIndex = 0;
-};
-
-void Movimiento(byte orden)
-{
-  switch(orden)
-  {
+//    case 0b00000001: 
+//      digitalWrite(Detenido, 1);
+//      break;
     case 0: 
-      if (digitalRead(Detenido)) digitalWrite(Detenido, 0);
-      else digitalWrite(Detenido, 1);
+      digitalWrite(Detenido, 1);
       break;
     case 1: 
-      digitalWrite(Adelante, 1);
+    digitalWrite(Adelante, 1);
       break;
     case 2: 
       digitalWrite(Atras, 1);
@@ -124,5 +100,58 @@ void Movimiento(byte orden)
       digitalWrite(RotI, 1);
       break;
   }
-  
-}
+};
+
+void Control(byte DATO)
+{
+  byte Session = ((DATO)&0b00000001);
+  byte Stimulo = ((DATO>>1)&0b00000001);
+  Serial.println(Stimulo);
+  byte Orden = ((DATO>>2)&0b00000111);
+//    Movimiento(Orden);
+    if ((Stimulo == 0)) 
+    {Movimiento(Orden);
+    
+    }
+    if (Stimulo == 1){
+      digitalWrite(Detenido, 1);
+      digitalWrite(Adelante, 0);
+      digitalWrite(Atras, 0);
+      digitalWrite(Derecha, 0);
+      digitalWrite(Izquierda, 0);
+      digitalWrite(RotD, 0);
+      digitalWrite(RotI, 0);
+    }
+    }
+
+
+
+//void Movimiento(byte orden)
+//{
+//  switch(orden)
+//  {
+//    case 0: 
+//      if (digitalRead(Detenido)) digitalWrite(Detenido, 0);
+//      else digitalWrite(Detenido, 1);
+//      break;
+//    case 1: 
+//      digitalWrite(Adelante, 1);
+//      break;
+//    case 2: 
+//      digitalWrite(Atras, 1);
+//      break;
+//    case 3: 
+//      digitalWrite(Derecha, 1);
+//      break;
+//    case 4: 
+//      digitalWrite(Izquierda, 1);
+//      break;
+//    case 5: 
+//      digitalWrite(RotD, 1);
+//      break;
+//    case 6: 
+//      digitalWrite(RotI, 1);
+//      break;
+//  }
+//  
+//}
