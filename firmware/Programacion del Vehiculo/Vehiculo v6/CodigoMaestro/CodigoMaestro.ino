@@ -29,13 +29,15 @@ char Recepcion=0;
 
 //                                    //m1 m1 m2 m2 m3 m3 m4 m4// SlaveMode Duracion Active break_val
 
-String Codigos_de_Movimiento_Adelante[12]={"t","f","t","f","f","t","f","t","4","1000000","","20"},
-  	Codigos_de_Movimiento_Atras[12]={"f","t","f","t","t","f","t","f","8","100000","","20"},
-  	Codigos_de_Movimiento_GiroIZQ[12]={"f","t","f","t","f","t","f","t","4","200000","dev","23"},
-  	Codigos_de_Movimiento_GiroDER[12]={"t","f","t","f","t","f","t","f","8","200000","dev","23"},
-	Codigos_de_Movimiento_Null[12]={"f","f","f","f","f","f","f","f","1","10","","1"};
+String Codigos_de_Movimiento_Adelante[12]={"t","f","t","f","f","t","f","t","4","5000","","20"},
+  	   Codigos_de_Movimiento_Atras[12]={"f","t","f","t","t","f","t","f","8","5000","","20"},
+   	   Codigos_de_Movimiento_GiroIZQ[12]={"f","t","f","t","f","t","f","t","4","5000","dev","23"},
+       Codigos_de_Movimiento_GiroDER[12]={"t","f","t","f","t","f","t","f","8","5000","dev","23"},
+       Codigos_de_Movimiento_DER[12]={"t","f","t","f","f","t","f","t","4","5000","","0"},
+       Codigos_de_Movimiento_IZQ[12]={"f","t","f","t","t","f","t","f","8","5000","","0"},
+	     Codigos_de_Movimiento_Null[12]={"f","f","f","f","f","f","f","f","1","10","","1"};
 
-byte Cantidad_de_Modos=5;
+byte Cantidad_de_Modos=7;
 
 int Motor_Num[8]={3,4,5,6,7,8,9,10};
 //                {2,6,11,10,17,16,15,14}
@@ -74,7 +76,7 @@ void setup(){
       
 void loop() {
   if(BTSerial.available()){
-  	byte res=(BTSerial.read());
+  	byte res=(BTSerial.read()-'0');
     Mode = res;
     CambiarMovimiento(Mode);
     Serial.println("Recived = "+String(Mode));
@@ -86,7 +88,7 @@ bool Iniciar_Movimiento(int codigo){
   //if(codigo>Cantidad_de_Modos){Mode=0;Serial.println("Error al leer el modo");return false;}
   Serial.print("Iniciando Movimiento : ");Serial.println(codigo);
   	if( CambiarModo(getCodigoDeMovimiento(codigo,8).toInt()) ){
-      	if(!Motor(1,getCodigoDeMovimiento(codigo,0),getCodigoDeMovimiento(codigo,1))){ApagarTodo();return false;}
+      if(!Motor(1,getCodigoDeMovimiento(codigo,0),getCodigoDeMovimiento(codigo,1))){ApagarTodo();return false;}
   		if(!Motor(2,getCodigoDeMovimiento(codigo,2),getCodigoDeMovimiento(codigo,3))){ApagarTodo();return false;}
   		if(!Motor(3,getCodigoDeMovimiento(codigo,4),getCodigoDeMovimiento(codigo,5))){ApagarTodo();return false;}
   		if(!Motor(4,getCodigoDeMovimiento(codigo,6),getCodigoDeMovimiento(codigo,7))){ApagarTodo();return false;}
@@ -110,7 +112,7 @@ void CambiarMovimiento(int Codigo){
         bool brk = false;
         switch(Codigo){
           	default:brk=true;break;
-          	case 1:case 2:if(PedirDatos()<getCodigoDeMovimiento(Codigo,11).toInt()){
+          	case 5:case 6:case 1:case 2:if(PedirDatos()<getCodigoDeMovimiento(Codigo,11).toInt()){
         			brk=true;
         		}break;
           	case 3:case 4:if(PedirDatos()>getCodigoDeMovimiento(Codigo,11).toInt()){
@@ -129,19 +131,19 @@ bool CambiarModo(int Codigo){
 	Send_To_Slave(Key_Confirmar_Modo);
     Send_To_Slave(5);
   	if(Obtener_Respuesta()!=Codigo){
-      Serial.println("A");
+      Serial.println("Codigo de respuesta A");
         Send_To_Slave( Key_Cambiar_Modo);
         Send_To_Slave(Codigo);
       	Send_To_Slave(Key_Confirmar_Modo);
     	Send_To_Slave(5);
       	if(Obtener_Respuesta()!=Codigo){
-          Serial.println("b");
+          Serial.println("Codigo de respuesta B");
         	Send_To_Slave( Key_Cambiar_Modo);
         	Send_To_Slave(Codigo);
       		Send_To_Slave(Key_Confirmar_Modo);
     		Send_To_Slave(5);
           	if(Obtener_Respuesta()!=Codigo){
-              Serial.println("C");
+              Serial.println("Codigo de respuesta C");
         		Send_To_Slave( Key_Cambiar_Modo);
         		Send_To_Slave(Codigo);
       			Send_To_Slave(Key_Confirmar_Modo);
@@ -189,10 +191,12 @@ String getCodigoDeMovimiento(int codigo,int codigo2){
 //usando la funcion .length revientan y no se porque
   	switch(codigo){
       	default:return Codigos_de_Movimiento_Null[codigo2];
-  		case 1:return  Codigos_de_Movimiento_Adelante[codigo2];
+  		  case 1:return  Codigos_de_Movimiento_Adelante[codigo2];
       	case 2:return  Codigos_de_Movimiento_Atras[codigo2];
       	case 3:return  Codigos_de_Movimiento_GiroIZQ[codigo2];
       	case 4:return  Codigos_de_Movimiento_GiroDER[codigo2];
+        case 5:return  Codigos_de_Movimiento_DER[codigo2];
+        case 6:return  Codigos_de_Movimiento_IZQ[codigo2];
     }
 
 }
