@@ -70,12 +70,12 @@ def plotEEG(signal, sujeto = 1, trial = 1, blanco = 1,
     signalAvg = 0
     
     #genero la grilla para graficar
-    fig, axes = plt.subplots(4, 2, figsize=(24, 20), gridspec_kw = dict(hspace=0.45, wspace=0.2))
+    fig, axes = plt.subplots(4, 2, figsize=(14, 10), gridspec_kw = dict(hspace=0.6, wspace=0.1))#
     
     if not title:
         title = f"Señal de EEG de sujeto {sujeto}"
     
-    fig.suptitle(title, fontsize=36)
+    fig.suptitle(title, fontsize=16)
     
     axes = axes.reshape(-1)
         
@@ -85,9 +85,9 @@ def plotEEG(signal, sujeto = 1, trial = 1, blanco = 1,
             signalAvg = np.average(signal[blanco - 1, canal - 1, :len(t), trial - 1])
         signalScale = (signal[blanco - 1, canal - 1, :len(t), trial - 1] - signalAvg)*scaling 
         axes[canal].plot(t, signalScale, color = "#e37165")
-        axes[canal].set_xlabel('Tiempo [seg]', fontsize=16) 
-        axes[canal].set_ylabel('Amplitud [uV]', fontsize=16)
-        axes[canal].set_title(f'Sujeto {sujeto} - Blanco {blanco} - Canal {canal + 1}', fontsize=22)
+        axes[canal].set_xlabel('Tiempo [seg]', fontsize=12) 
+        axes[canal].set_ylabel('Amplitud [uV]', fontsize=12)
+        axes[canal].set_title(f'Sujeto {sujeto} - Blanco {blanco} - Canal {canal + 1}', fontsize=16)
         axes[canal].yaxis.grid(True)
 
     if save:

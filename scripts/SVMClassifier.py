@@ -155,12 +155,12 @@ def main():
     stimuli = 1 #one stimulus
 
     subjects = [1] #un solo sujeto
-    filenames = ["S1_R1_S1_E6","S1_R1_S1_E7"]
+    filenames = ["S1_R3_S1_E6","S1_R3_S1_E7"]
     allData = fa.loadData(path = path, filenames = filenames)
     names = list(allData.keys())
 
-    allData['S1_R1_S1_E6']["eeg"] = allData['S1_R1_S1_E6']["eeg"][:,1:5,:,:].reshape(1,4,1250,15).reshape(1,4,1250,15)
-    allData['S1_R1_S1_E7']["eeg"] = allData['S1_R1_S1_E7']["eeg"][:,1:5,:,:].reshape(1,4,1250,15).reshape(1,4,1250,15)
+    allData['S1_R3_S1_E6']["eeg"] = allData['S1_R3_S1_E6']["eeg"][:,1:5,:,:].reshape(1,4,1250,15).reshape(1,4,1250,15)
+    allData['S1_R3_S1_E7']["eeg"] = allData['S1_R3_S1_E7']["eeg"][:,1:5,:,:].reshape(1,4,1250,15).reshape(1,4,1250,15)
 
     def joinData(allData, stimuli, channels, samples, trials):
         joinedData = np.zeros((stimuli, channels, samples, trials))
@@ -191,9 +191,7 @@ def main():
                     'sampling_rate': fm
                     }
     
-    trainSet = joinedData[:,:,:,:8] #me quedo con los primeros 8 trials para entrenamiento y validación
-
-    testSet = joinedData[:,:,:,8:] #me quedo con los últimos 2 trials para test
+    testSet = joinedData[:,:,:,12:] #me quedo con los últimos 3 trials para test
     
     path = "E:\reposBCICompetition\BCIC-Personal\scripts\Bases\models"
     
@@ -207,7 +205,7 @@ def main():
     #Es importante tener en cuenta que los datos de OpenBCI vienen en la forma [canales x samples]
     
     clase = 1 #corresponde al estímulo de 6Hz
-    trial = 1
+    trial = 3
     
     rawEEG = testSet[clase - 1, :, : , trial - 1]
     
@@ -215,7 +213,7 @@ def main():
     print(f"El estímulo clasificado fue {frecClasificada}")
     
     clase = 2 #corresponde al estímulo de 7Hz
-    trial = 2
+    trial = 3
     
     rawEEG = testSet[clase - 1, :, : , trial - 1]
     
