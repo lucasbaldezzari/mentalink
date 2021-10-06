@@ -31,6 +31,9 @@
   byte Stimulo = 0;
   byte Orden = 0;
   byte Session = 0;
+  bool Algo_Adelante=0;
+  bool Algo_Atras=0;
+  bool Se_Esta_Moviendo=0;
   
   ///////////////////////////////////////////////////
   //                                    //m1 m1 m2 m2 m3 m3 m4 m4// SlaveMode Duracion Active break_val
@@ -49,7 +52,8 @@
   //                {2,6,11,10,17,16,15,14}
   
   byte acutal_Motor_Modes[4]={0,0,0,0};
-  
+
+
   byte I2C_SLAVE_ADDR =0x01;
   
   byte Mode=0;
@@ -87,14 +91,20 @@
     if(BTSerial.available()){
        byte res=(BTSerial.read());
        Control(res);
-         byte mensajedevuelta = PedirDatos();
-       BTSerial.write(mensajedevuelta);
+         
+         // 0b0000 00       0/1 0/1
+
       }
   }
      // Mode = res;
      // CambiarMovimiento(Mode);
      // Serial.println("Recived = "+String(Mode));
-  
+  void SendToPC(){
+    //0000 0(moviendose)(algo adelante)(algo atras)
+    BTSerial.write((byte)(Algo_Adelante<<1)|Algo_Atras|(Se_Esta_Moviendo<<2));
+    Algo_Adelante=0;
+    Algo_Atras=0;
+  }
   
   
   
@@ -138,11 +148,20 @@
         long t1 = millis();
         int delta=0;
         while(delta<getCodigoDeMovimiento(Codigo,9).toInt()){
+          Se_Esta_Moviendo=1;
           bool brk = false;
+          SendToPC();
           switch(Codigo){
             	default:brk=true;break;
-            	case 5:case 6:case 1:case 2:if(PedirDatos()<getCodigoDeMovimiento(Codigo,11).toInt()){
+            	case 5:case 6:case 1:if(PedirDatos()<getCodigoDeMovimiento(Codigo,11).toInt()){
+                Algo_Adelante=1;
           			brk=true;
+                
+          		}break;
+              case 2:if(PedirDatos()<getCodigoDeMovimiento(Codigo,11).toInt()){
+                Algo_Atras=1;
+          			brk=true;
+                
           		}break;
             	case 3:case 4:if(PedirDatos()>getCodigoDeMovimiento(Codigo,11).toInt()){
           			brk=true;
@@ -153,7 +172,9 @@
         	delta += t2-t1;
           t1=t2;
         }		
-        	Iniciar_Movimiento(0);
+        Se_Esta_Moviendo=0;
+        SendToPC();
+        Iniciar_Movimiento(0);
     	}
   }
   bool CambiarModo(int Codigo){
