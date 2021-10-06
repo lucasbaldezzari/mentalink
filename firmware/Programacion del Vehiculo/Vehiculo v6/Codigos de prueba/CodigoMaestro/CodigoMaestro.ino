@@ -139,7 +139,7 @@
     	}
   }
   byte PedirDatos(){
-  	Send_To_Slave(Key_Confirmar_Variable);
+  	  Send_To_Slave(Key_Confirmar_Variable);
     	return Obtener_Respuesta();
   }
   void CambiarMovimiento(byte Codigo){
@@ -191,23 +191,25 @@
           	Send_To_Slave( Key_Cambiar_Modo);
           	Send_To_Slave(Codigo);
         		Send_To_Slave(Key_Confirmar_Modo);
-      		Send_To_Slave(5);
-            	if(Obtener_Respuesta()!=Codigo){
-                Serial.println("Codigo de respuesta C");
-          		Send_To_Slave( Key_Cambiar_Modo);
-          		Send_To_Slave(Codigo);
-        			Send_To_Slave(Key_Confirmar_Modo);
-      			Send_To_Slave(5);
-      		}else{
-      			return true;
-      		}
-      	}else{
-      		return true;
-      	}
-      }else{
-      	return true;
-      }
-    	return false;
+      		  Send_To_Slave(5);
+            if(Obtener_Respuesta()!=Codigo){
+              Serial.println("Codigo de respuesta C");
+          	  Send_To_Slave( Key_Cambiar_Modo);
+          	  Send_To_Slave(Codigo);
+        		  Send_To_Slave(Key_Confirmar_Modo);
+      			  Send_To_Slave(5);
+              if(Obtener_Respuesta()==Codigo){return true;}
+      		  }else{
+      			  return true;
+      		  }
+      	  }else{
+      		  return true;
+      	  }
+        }else{
+      	  return true;
+        }
+        
+    	  return false;
     	
   }
   void ApagarTodo(){
@@ -220,7 +222,7 @@
     Mode=0;
   }
   bool Motor(int motor,String a,String b){
-    if(a=="t" && b=="t"){return false;}
+    if(a=="t" && b=="t"){Serial.println("Error Prendiendo Motor "+String(motor)+"\nLos datos del Modo estan mal ingresados");return false;}
     if(a=="t"){acutal_Motor_Modes[motor]=1;}else
     if(b=="t"){acutal_Motor_Modes[motor]=2;}else
     {acutal_Motor_Modes[motor]=0;}
@@ -362,8 +364,8 @@
     	return response;
   }
   void Send_To_Slave(byte data){
-   	Wire.beginTransmission(I2C_SLAVE_ADDR);
+   	  Wire.beginTransmission(I2C_SLAVE_ADDR);
      	Wire.write((byte*)&data, sizeof(data));
      	Wire.endTransmission();
-    Serial.println("Se envio : "+String(data));
+      Serial.println("Se envio : "+String(data));
   }
