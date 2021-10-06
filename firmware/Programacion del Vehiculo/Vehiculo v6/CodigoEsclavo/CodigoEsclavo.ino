@@ -62,13 +62,23 @@ int suma =0;
 bool Haciendo_Algo = 0;
 bool Active = 1;
 
+
 void setup() {
  	//CODIGO esclavo
   	Serial.begin(9600);
- 	Wire.begin(0x01); //identifico como esclavo 1
- 	Wire.onReceive( receiveEvent); //Declaro Evento
- 	Wire.onRequest(Peticion); //Declaro Evento
-    pinMode(1, OUTPUT);
+    if(TestearSensores()){
+
+      Wire.begin(0x01); //identifico como esclavo 1
+  	  Wire.onReceive( receiveEvent); //Declaro Evento
+ 	    Wire.onRequest(Peticion); //Declaro Evento
+      pinMode(1, OUTPUT);
+    }else{
+      Serial.println("Los Sensores estan desconectados y/o Cargaste el codigo del esclavo en el maestro");
+      Active =0; 
+    }
+
+
+
 }
 
 void loop() {
@@ -82,6 +92,23 @@ void loop() {
       if (Modo== ModoGirando[0]){digitalWrite(1, 1);Analizar(4);}
   }
 
+}
+bool TestearSensores(){
+  long has=Analizar(Sensor_Pines[0][0],Sensor_Pines[0][1]);
+  if(has=0){
+    has=Analizar(Sensor_Pines[0][0],Sensor_Pines[0][1]);
+    if(has=0){
+      return false;
+    }
+  }
+   has=Analizar(Sensor_Pines[1][0],Sensor_Pines[1][1]);
+  if(has=0){
+    has=Analizar(Sensor_Pines[1][0],Sensor_Pines[1][1]);
+    if(has=0){
+      return false;
+    }
+  }
+  return true;
 }
 
 void Reset(){
