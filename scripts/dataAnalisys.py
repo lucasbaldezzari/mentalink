@@ -14,24 +14,24 @@ from utils import plotSpectrum, plotOneSpectrum, plotEEG
 import matplotlib.pyplot as plt
 
 actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
-path = os.path.join(actualFolder,"recordedEEG\olds")
+path = os.path.join(actualFolder,"recordedEEG")
 
-trials = 10
-fm = 250.
+trials = 15
+fm = 200.
 window = 5 #sec
 samplePoints = int(fm*window)
 channels = 4
 stimuli = 1 #one stimulus
 
 subjects = [1]
-filenames = ["S1_R1_S1_E7","S1_R2_S1_E7","S1_R3_S1_E7"]
+filenames = ["S2_R1_S1_E9"]
 allData = fa.loadData(path = path, filenames = filenames)
 
-name = "S1_R2_S1_E7" #nombre de los datos a analizar}
-stimuli = [6,7,8,9] #lista de estímulos
-estim = [7] #Le pasamos un estímulo para que grafique una linea vertical
+name = "S2_R1_S1_E9" #nombre de los datos a analizar}
+stimuli = [9] #lista de estímulos
+estim = [9] #Le pasamos un estímulo para que grafique una linea vertical
 
-eeg = allData[name]['eeg'][:,:4,:,:]
+eeg = allData[name]['eeg'][:,:2,:,:]
 
 #Chequeamos información del registro eeg 1
 print(allData[name]["generalInformation"])
@@ -75,7 +75,7 @@ MSF1 = computeMagnitudSpectrum(eegSegmented, FFT_PARAMS)
 #Graficamos espectro para los cuatro canales promediando los trials
 ########################################################################
 
-canales = [1,2,3,4]
+canales = [1,2]
 
 title = f"Espectro - Trials promediados - sujeto {name}"
 fig, plots = plt.subplots(2, 2, figsize=(16, 14), gridspec_kw=dict(hspace=0.45, wspace=0.3))
