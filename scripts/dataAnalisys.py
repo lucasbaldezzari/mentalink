@@ -14,7 +14,7 @@ from utils import plotSpectrum, plotOneSpectrum, plotEEG
 import matplotlib.pyplot as plt
 
 actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
-path = os.path.join(actualFolder,"recordedEEG")
+path = os.path.join(actualFolder,"recordedEEG\EA_14_10_ROJO")
 
 trials = 15
 fm = 200.
@@ -24,10 +24,10 @@ channels = 4
 stimuli = 1 #one stimulus
 
 subjects = [1]
-filenames = ["S2_R1_S1_E9"]
+filenames = ["S2_R1_S2_E6"]
 allData = fa.loadData(path = path, filenames = filenames)
 
-name = "S2_R1_S1_E9" #nombre de los datos a analizar}
+name = "S2_R1_S2_E6" #nombre de los datos a analizar}
 stimuli = [9] #lista de estímulos
 estim = [9] #Le pasamos un estímulo para que grafique una linea vertical
 
@@ -105,8 +105,8 @@ plt.show()
 #Graficamos espectro para los cuatro canales para un trial en particular
 ########################################################################
 
-canales = [1,2,3,4]
-trial = 3
+canales = [1,2]
+trial = 10
 
 title = f"Espectro - Trial número {trial} - sujeto {name}"
 fig, plots = plt.subplots(2, 2, figsize=(16, 14), gridspec_kw=dict(hspace=0.45, wspace=0.3))
