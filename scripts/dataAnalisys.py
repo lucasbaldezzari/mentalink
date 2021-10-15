@@ -10,11 +10,12 @@ import numpy as np
 import fileAdmin as fa
 from utils import filterEEG, segmentingEEG, computeMagnitudSpectrum, computeComplexSpectrum
 from utils import plotSpectrum, plotOneSpectrum, plotEEG
+from utils import norm_mean_std
 
 import matplotlib.pyplot as plt
 
 actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
-path = os.path.join(actualFolder,"recordedEEG\EA_14_10_ROJO")
+path = os.path.join(actualFolder,"recordedEEG")
 
 trials = 15
 fm = 200.
@@ -24,14 +25,15 @@ channels = 4
 stimuli = 1 #one stimulus
 
 subjects = [1]
-filenames = ["S2_R1_S2_E6"]
+filenames = ["lb-R2-S2-E7","lb-R2-S2-E9","lb-R2-S2-E11","lb-R2-S2-E13"]
 allData = fa.loadData(path = path, filenames = filenames)
 
-name = "S2_R1_S2_E6" #nombre de los datos a analizar}
-stimuli = [9] #lista de estímulos
-estim = [9] #Le pasamos un estímulo para que grafique una linea vertical
+name = "lb-R2-S2-E11" #nombre de los datos a analizar}
+stimuli = [7,9,11,13] #lista de estímulos
+estim = [11] #Le pasamos un estímulo para que grafique una linea vertical
 
-eeg = allData[name]['eeg'][:,:2,:,:]
+eeg = allData[name]['eeg'][:,:4,:,:] #utilizamos solo los dos primeros canales
+eeg = norm_mean_std(eeg) #normalizamos los datos
 
 #Chequeamos información del registro eeg 1
 print(allData[name]["generalInformation"])
@@ -75,7 +77,7 @@ MSF1 = computeMagnitudSpectrum(eegSegmented, FFT_PARAMS)
 #Graficamos espectro para los cuatro canales promediando los trials
 ########################################################################
 
-canales = [1,2]
+canales = [1,2,3,4]
 
 title = f"Espectro - Trials promediados - sujeto {name}"
 fig, plots = plt.subplots(2, 2, figsize=(16, 14), gridspec_kw=dict(hspace=0.45, wspace=0.3))
@@ -105,8 +107,8 @@ plt.show()
 #Graficamos espectro para los cuatro canales para un trial en particular
 ########################################################################
 
-canales = [1,2]
-trial = 10
+canales = [1,2,3,4]
+trial = 4
 
 title = f"Espectro - Trial número {trial} - sujeto {name}"
 fig, plots = plt.subplots(2, 2, figsize=(16, 14), gridspec_kw=dict(hspace=0.45, wspace=0.3))
@@ -132,7 +134,7 @@ plt.show()
 #graficamos espectro para todos los trials y un canal
 ########################################################################
 
-canal = 2 #elegimos un canal
+canal = 1 #elegimos un canal
 
 title = f"Espectro para cada trial - Canal {canal} - Estímulo {estim[0]}Hz - Sujeto {name}"
 
@@ -153,6 +155,5 @@ for trial in range(MSF1.shape[3]):
         plots[trial].xaxis.grid(True)
         plots[trial].axvline(x = estim[0], ymin = 0., ymax = max(fft_axis),
                                 linestyle='--', color = "#e37165", alpha = 0.9)
-        # plots[trial].legend()
 
 plt.show()
