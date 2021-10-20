@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.6.0">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.05" unitdist="inch" unit="mm" style="lines" multiple="1" display="no" altdistance="0.025" altunitdist="inch" altunit="mm"/>
@@ -1557,9 +1558,9 @@ design rules under a new name.</description>
 <param name="mdWireWire" value="30mil"/>
 <param name="mdWirePad" value="30mil"/>
 <param name="mdWireVia" value="30mil"/>
-<param name="mdPadPad" value="8mil"/>
-<param name="mdPadVia" value="8mil"/>
-<param name="mdViaVia" value="8mil"/>
+<param name="mdPadPad" value="30mil"/>
+<param name="mdPadVia" value="30mil"/>
+<param name="mdViaVia" value="30mil"/>
 <param name="mdSmdPad" value="8mil"/>
 <param name="mdSmdVia" value="8mil"/>
 <param name="mdSmdSmd" value="8mil"/>
@@ -1612,10 +1613,14 @@ design rules under a new name.</description>
 <param name="slThermalsForVias" value="0"/>
 <param name="dpMaxLengthDifference" value="10mm"/>
 <param name="dpGapFactor" value="2.5"/>
-<param name="checkGrid" value="0"/>
 <param name="checkAngle" value="0"/>
 <param name="checkFont" value="1"/>
 <param name="checkRestrict" value="1"/>
+<param name="checkStop" value="0"/>
+<param name="checkValues" value="0"/>
+<param name="checkNames" value="1"/>
+<param name="checkWireStubs" value="1"/>
+<param name="checkPolygonWidth" value="0"/>
 <param name="useDiameter" value="13"/>
 <param name="maxErrors" value="50"/>
 </designrules>
@@ -1716,67 +1721,119 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="IC1" library="st-microelectronics" package="DIL16" value="L293D" x="34.29" y="31.75">
+<element name="IC1" library="st-microelectronics" package="DIL16" value="L293D" x="34.29" y="31.75" smashed="yes">
+<attribute name="MF" value="" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="L293D" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="23.749" y="28.829" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="OC_FARNELL" value="9589619" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="56P8249" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="L293D" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="" x="34.29" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="26.797" y="31.115" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="IC2" library="st-microelectronics" package="DIL16" value="L293D" x="62.23" y="31.75">
+<element name="IC2" library="st-microelectronics" package="DIL16" value="L293D" x="62.23" y="31.75" smashed="yes">
+<attribute name="MF" value="" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="L293D" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="51.689" y="28.829" size="1.27" layer="25" ratio="10" rot="R90"/>
 <attribute name="OC_FARNELL" value="9589619" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="56P8249" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="L293D" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="" x="62.23" y="31.75" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="54.737" y="31.115" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="5V" library="con-molex" package="22-23-2021" value="22-23-2021" x="20.32" y="47.625" rot="R90">
+<element name="5V" library="con-molex" package="22-23-2021" value="22-23-2021" x="20.32" y="47.625" smashed="yes" rot="R90">
+<attribute name="MF" value="MOLEX" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NAME" x="16.51" y="45.085" size="1.016" layer="25" ratio="10" rot="R90"/>
 <attribute name="OC_FARNELL" value="1462926" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="MF" value="MOLEX" x="20.32" y="47.625" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="25.4" y="45.085" size="1.016" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="JP15V" library="pinhead" package="1X02" value="" x="25.4" y="47.625" rot="R90"/>
-<element name="X2" library="con-molex" package="22-23-2021" value="22-23-2021" x="24.13" y="13.97">
+<element name="JP15V" library="pinhead" package="1X02" value="" x="25.4" y="47.625" smashed="yes" rot="R90">
+<attribute name="NAME" x="23.5712" y="45.0088" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="VALUE" x="28.575" y="45.085" size="1.27" layer="27" rot="R90"/>
+</element>
+<element name="X2" library="con-molex" package="22-23-2021" value="22-23-2021" x="24.13" y="13.97" smashed="yes">
+<attribute name="MF" value="MOLEX" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="21.59" y="17.78" size="1.016" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="1462926" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="MOLEX" x="17.78" y="25.4" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="21.59" y="8.89" size="1.016" layer="27" ratio="10"/>
 </element>
-<element name="JP212V" library="pinhead" package="1X02" value="" x="24.13" y="19.05"/>
-<element name="U$1" library="adafruit" package="ARDUINO" value="ARDUINOUNO" x="8.89" y="3.81"/>
-<element name="X1" library="con-molex" package="22-23-2021" value="22-23-2021" x="34.29" y="41.91">
+<element name="JP212V" library="pinhead" package="1X02" value="" x="24.13" y="19.05" smashed="yes">
+<attribute name="NAME" x="21.5138" y="20.8788" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="21.59" y="15.875" size="1.27" layer="27"/>
+</element>
+<element name="U$1" library="adafruit" package="ARDUINO" value="ARDUINOUNO" x="8.89" y="3.81" smashed="yes"/>
+<element name="X1" library="con-molex" package="22-23-2021" value="22-23-2021" x="34.29" y="41.91" smashed="yes">
+<attribute name="MF" value="MOLEX" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="31.75" y="45.72" size="1.016" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="1462926" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="MOLEX" x="34.29" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="31.75" y="36.83" size="1.016" layer="27" ratio="10"/>
 </element>
-<element name="X3" library="con-molex" package="22-23-2021" value="22-23-2021" x="62.23" y="41.91">
+<element name="X3" library="con-molex" package="22-23-2021" value="22-23-2021" x="62.23" y="41.91" smashed="yes">
+<attribute name="MF" value="MOLEX" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="59.69" y="45.72" size="1.016" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="1462926" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="MOLEX" x="62.23" y="41.91" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="59.69" y="36.83" size="1.016" layer="27" ratio="10"/>
 </element>
-<element name="X4" library="con-molex" package="22-23-2021" value="22-23-2021" x="34.29" y="21.59" rot="R180">
+<element name="X4" library="con-molex" package="22-23-2021" value="22-23-2021" x="34.29" y="21.59" smashed="yes" rot="R180">
+<attribute name="MF" value="MOLEX" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="36.83" y="17.78" size="1.016" layer="25" ratio="10" rot="R180"/>
 <attribute name="OC_FARNELL" value="1462926" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MF" value="MOLEX" x="34.29" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="36.83" y="26.67" size="1.016" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="X5" library="con-molex" package="22-23-2021" value="22-23-2021" x="62.23" y="21.59" rot="R180">
+<element name="X5" library="con-molex" package="22-23-2021" value="22-23-2021" x="62.23" y="21.59" smashed="yes" rot="R180">
+<attribute name="MF" value="MOLEX" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MPN" value="22-23-2021" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="64.77" y="17.78" size="1.016" layer="25" ratio="10" rot="R180"/>
 <attribute name="OC_FARNELL" value="1462926" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_NEWARK" value="25C3832" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MPN" value="22-23-2021" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MF" value="MOLEX" x="62.23" y="21.59" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="64.77" y="26.67" size="1.016" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="R1" library="resistor" package="0207/10" value="" x="20.32" y="30.48" rot="R270"/>
-<element name="R2" library="resistor" package="0207/10" value="" x="49.53" y="31.75" rot="R90"/>
-<element name="JPM1" library="pinhead" package="1X02" value="" x="34.29" y="48.26"/>
-<element name="JPM3" library="pinhead" package="1X02" value="" x="62.23" y="46.99"/>
-<element name="JPM2" library="pinhead" package="1X02" value="" x="34.29" y="15.875" rot="R180"/>
-<element name="JPM4" library="pinhead" package="1X02" value="" x="62.23" y="15.875" rot="R180"/>
-<element name="JPM5" library="pinhead" package="1X02" value="" x="71.12" y="46.99"/>
-<element name="LED1" library="led" package="LED5MM" value="" x="46.99" y="43.18" rot="R180"/>
-<element name="R3" library="resistor" package="0207/10" value="" x="52.07" y="45.72" rot="R270"/>
-<element name="JP1" library="pinhead" package="1X07" value="" x="14.605" y="26.035" rot="R270"/>
+<element name="R1" library="resistor" package="0207/10" value="" x="20.32" y="30.48" smashed="yes" rot="R270">
+<attribute name="NAME" x="21.844" y="33.528" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="19.685" y="32.7406" size="1.27" layer="27" ratio="10" rot="R270"/>
+</element>
+<element name="R2" library="resistor" package="0207/10" value="" x="49.53" y="31.75" smashed="yes" rot="R90">
+<attribute name="NAME" x="48.006" y="28.702" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="VALUE" x="50.165" y="29.4894" size="1.27" layer="27" ratio="10" rot="R90"/>
+</element>
+<element name="JPM1" library="pinhead" package="1X02" value="" x="34.29" y="48.26" smashed="yes">
+<attribute name="NAME" x="31.6738" y="50.0888" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="31.75" y="45.085" size="1.27" layer="27"/>
+</element>
+<element name="JPM3" library="pinhead" package="1X02" value="" x="62.23" y="46.99" smashed="yes">
+<attribute name="NAME" x="59.6138" y="48.8188" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="59.69" y="43.815" size="1.27" layer="27"/>
+</element>
+<element name="JPM2" library="pinhead" package="1X02" value="" x="34.29" y="15.875" smashed="yes" rot="R180">
+<attribute name="NAME" x="36.9062" y="14.0462" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="36.83" y="19.05" size="1.27" layer="27" rot="R180"/>
+</element>
+<element name="JPM4" library="pinhead" package="1X02" value="" x="62.23" y="15.875" smashed="yes" rot="R180">
+<attribute name="NAME" x="64.8462" y="14.0462" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="64.77" y="19.05" size="1.27" layer="27" rot="R180"/>
+</element>
+<element name="JPM5" library="pinhead" package="1X02" value="" x="71.12" y="46.99" smashed="yes">
+<attribute name="NAME" x="68.5038" y="48.8188" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="68.58" y="43.815" size="1.27" layer="27"/>
+</element>
+<element name="LED1" library="led" package="LED5MM" value="" x="46.99" y="43.18" smashed="yes" rot="R180">
+<attribute name="NAME" x="43.815" y="42.6466" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="43.7896" y="44.9834" size="1.27" layer="27" ratio="10" rot="R180"/>
+</element>
+<element name="R3" library="resistor" package="0207/10" value="" x="52.07" y="45.72" smashed="yes" rot="R270">
+<attribute name="NAME" x="53.594" y="48.768" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="51.435" y="47.9806" size="1.27" layer="27" ratio="10" rot="R270"/>
+</element>
+<element name="JP1" library="pinhead" package="1X07" value="" x="14.605" y="26.035" smashed="yes" rot="R270">
+<attribute name="NAME" x="16.4338" y="35.0012" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="11.43" y="34.925" size="1.27" layer="27" rot="R270"/>
+</element>
 </elements>
 <signals>
 <signal name="GND4">
@@ -2081,6 +2138,13 @@ design rules under a new name.</description>
 <wire x1="40.386" y1="52.451" x2="40.386" y2="54.61" width="0.8128" layer="16"/>
 </signal>
 </signals>
+<mfgpreviewcolors>
+<mfgpreviewcolor name="soldermaskcolor" color="0xC8008000"/>
+<mfgpreviewcolor name="silkscreencolor" color="0xFFFEFEFE"/>
+<mfgpreviewcolor name="backgroundcolor" color="0xFF282828"/>
+<mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
+<mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
+</mfgpreviewcolors>
 </board>
 </drawing>
 </eagle>
