@@ -21,20 +21,23 @@ class DataThread(threading.Thread):
         threading.Thread.__init__(self)
         
         self.eeg_channels = BoardShim.get_eeg_channels(board_id)
+        print("***********")
+        print(f"Channles: {self.eeg_channels}")
+        print("***********")
         self.acel_channels = BoardShim.get_accel_channels(board_id)
         self.sampling_rate = BoardShim.get_sampling_rate(board_id)
         self.keep_alive = True
         self.board = board
         self.trialDuration = 4 #secs
         
-    def getData (self, duration, channels = 8):
+    def getData (self, duration, channels = 4):
 
         data = self.board.get_current_board_data(int(duration*self.sampling_rate))
         eeg = []        
         eeg = [data[canal] for canal in self.eeg_channels]
         eeg = np.asarray(eeg)
         
-        return eeg
+        return eeg[:channels,:]
         
         # return self.board.get_current_board_data(int(duration*self.sampling_rate))[:channels]
         
@@ -48,8 +51,6 @@ class DataThread(threading.Thread):
             time.sleep (sleep_time)
             # get current board data doesnt remove data from the buffer
             data = self.board.get_current_board_data(int(points_per_update))
-            # print(f"New data {data[:10]}")
-            # print(f"New data {data.shape}")
             
 def main():
     BoardShim.enable_dev_board_logger()

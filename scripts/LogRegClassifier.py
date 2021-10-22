@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep  9 11:12:08 2021
+Created on Fri Sep 10 17:46:17 2021
 
 @author: Lucas Baldezzari
 
-SVMClassifier: Clase que permiteusar un SVM para clasificar SSVEPs a partir de datos de EEG
+LogRegClassifier: Clase que permite usar un clasificador
+por Logistic Regression para clasificar SSVEPs a partir de datos de EEG
 
 ************ VERSIÓN SCP-01-RevA ************
 """
@@ -13,17 +14,24 @@ import os
 import numpy as np
 import numpy.matlib as npm
 import pandas as pd
+import json
+
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.svm import SVC
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_recall_fscore_support
 
 import pickle
 
 import matplotlib.pyplot as plt
 
 from utils import filterEEG, segmentingEEG, computeMagnitudSpectrum
+from utils import plotEEG
 from utils import norm_mean_std
-
 import fileAdmin as fa
 
-class SVMClassifier():
+class LogRegClassifier():
     
     def __init__(self, modelFile, frecStimulus,
                  PRE_PROCES_PARAMS, FFT_PARAMS, path = "models"):
@@ -41,7 +49,7 @@ class SVMClassifier():
         os.chdir(path)
         
         with open(self.modelName, 'rb') as file:
-            self.svm = pickle.load(file)
+            self.logreg = pickle.load(file)
             
         os.chdir(actualFolder)
         
@@ -135,15 +143,14 @@ class SVMClassifier():
         
         dataForSVM = self.transformDataForClassifier(rawFeatures) #transformamos el espacio de características
         
-        index = self.svm.predict(dataForSVM)[0] #clasificamos
+        index = self.logreg.predict(dataForSVM)[0] #clasificamos
         
         return self.frecStimulusList[index] #retornamos la frecuencia clasificada
     
     
 def main():
-
-    """Empecemos"""
-
+    """Let's starting"""
+    
     actualFolder = os.getcwd()#directorio donde estamos actualmente. Debe contener el directorio dataset
     path = os.path.join(actualFolder,"recordedEEG\WM\ses1")
 
@@ -155,30 +162,10 @@ def main():
     samplePoints = int(fm*window)
     channels = 4
 
-    filesRun1 = ["S3_R1_S2_E6","S3-R1-S1-E7", "S3-R1-S1-E8","S3-R1-S1-E9"]
+    filesRun1 = ["S3-R1-S1-E6","S3-R1-S1-E7", "S3-R1-S1-E8","S3-R1-S1-E9"]
     run1 = fa.loadData(path = path, filenames = filesRun1)
-    filesRun2 = ["S3_R2_S2_E6","S3-R2-S1-E7", "S3-R2-S1-E8","S3-R2-S1-E9"]
+    filesRun2 = ["S3-R2-S1-E6","S3-R2-S1-E7", "S3-R2-S1-E8","S3-R2-S1-E9"]
     run2 = fa.loadData(path = path, filenames = filesRun2)
-
-    #Filtering de EEG
-    PRE_PROCES_PARAMS = {
-                    'lfrec': 4.,
-                    'hfrec': 38.,
-                    'order': 8,
-                    'sampling_rate': fm,
-                    'bandStop': 50.,
-                    'window': window,
-                    'shiftLen':window
-                    }
-
-    resolution = np.round(fm/samplePoints, 4)
-
-    FFT_PARAMS = {
-                    'resolution': resolution,#0.2930,
-                    'start_frequency': 4.0,
-                    'end_frequency': 38.0,
-                    'sampling_rate': fm
-                    }
 
     def joinData(allData, stimuli, channels, samples, trials):
         joinedData = np.zeros((stimuli, channels, samples, trials))
@@ -192,37 +179,56 @@ def main():
 
     testSet = np.concatenate((run1JoinedData[:,:,:,12:], run2JoinedData[:,:,:,12:]), axis = 3)
     testSet = testSet[:,:2,:,:] #nos quedamos con los primeros dos canales
-    #testSet = norm_mean_std(testSet) #normalizamos los datos
+    #testSet = norm_mean_std(testSet)
+    
+    #testSet = joinedData[:,:,:,12:] #me quedo con los últimos 2 trials para test
+    #testSet = testSet[:,:2,:,:] #nos quedamos con los primeros dos canales
+    
+    path = "E:\\reposBCICompetition\\BCIC-Personal\\scripts\\Bases"
+    
+    path = os.path.join(path,"models\\WM\\logreg")
+    
+    modelFile = "logreg_WM_test1_15102021.pkl"
 
-    #trainSet = joinedData[:,:,:,:12] #me quedo con los primeros 12 trials para entrenamiento y validación
-    #trainSet = trainSet[:,:2,:,:] #nos quedamos con los primeros dos canales
-    
-    path = "E:\reposBCICompetition\BCIC-Personal\scripts\Bases\models"
-    
-    path = os.path.join('E:\\reposBCICompetition\\BCIC-Personal\\scripts\\Bases',"models")
-    
-    #modelFile = "SVM_LucasB_100accu_14102021.pkl" #nombre del modelo
-    modelFile = "SVM_WM_2chann_rojo_rbf_221021.pkl" #nombre del modelo
+    #Filtering de EEG
+    PRE_PROCES_PARAMS = {
+                    'lfrec': 4.,
+                    'hfrec': 30.,
+                    'order': 8,
+                    'sampling_rate': fm,
+                    'bandStop': 50.,
+                    'window': window,
+                    'shiftLen':window
+                    }
+
+    resolution = np.round(fm/samplePoints, 4)
+
+    FFT_PARAMS = {
+                    'resolution': resolution,#0.2930,
+                    'start_frequency': 4.0,
+                    'end_frequency': 30.0,
+                    'sampling_rate': fm
+                    }
         
-    svm = SVMClassifier(modelFile, frecStimulus, PRE_PROCES_PARAMS, FFT_PARAMS, path = path)
+    logreg = LogRegClassifier(modelFile, frecStimulus, PRE_PROCES_PARAMS, FFT_PARAMS, path = path)
     
     #De nuestro set de datos seleccionamos el EEG de correspondiente a una clase y un trial.
     #Es importante tener en cuenta que los datos de OpenBCI vienen en la forma [canales x samples]
     
-    clase = 1 #corresponde al estímulo de 6Hz
-    trial = 2
+    clase = 1 #corresponde al estímulo de 7Hz
+    trial = 6
     
     rawEEG = testSet[clase - 1, :, : , trial - 1]
     
-    frecClasificada = svm.getClassification(rawEEG = rawEEG)
+    frecClasificada = logreg.getClassification(rawEEG = rawEEG)
     print(f"El estímulo clasificado fue {frecClasificada}")
     
-    clase = 4
+    clase = 3 #corresponde al estímulo de 11Hz
     trial = 3
     
     rawEEG = testSet[clase - 1, :, : , trial - 1]
     
-    frecClasificada = svm.getClassification(rawEEG = rawEEG)
+    frecClasificada = logreg.getClassification(rawEEG = rawEEG)
     print(f"El estímulo clasificado fue {frecClasificada}")
 
     trials = 6
@@ -231,7 +237,7 @@ def main():
     for i, clase in enumerate(np.arange(4)):
         for j, trial in enumerate(np.arange(6)):
             data = testSet[clase, :, : , trial]
-            classification = svm.getClassification(rawEEG = data)
+            classification = logreg.getClassification(rawEEG = data)
             if classification == frecStimulus[clase]:
                 predicciones[i,j] = 1
 
@@ -242,8 +248,10 @@ def main():
 
     predictions['promedio'] = predictions.mean(numeric_only=True, axis=1)
     
-    print(f"Predicciones usando el modelo SVM {modelFile}")
+    print(f"Predicciones usando el modelo LogReg {modelFile}")
     print(predictions)
 
-if __name__ == "__main__":
-    main()
+
+# if __name__ == "__main__":
+#     main()
+
