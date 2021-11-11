@@ -1,0 +1,6 @@
+Ida y vuelta del M1 al M3.2
+Apaga las LEDs dependiendo del sensado
+Sin Delays
+Funcionando
+
+Por implementar: que solo sense mientras se mueve el vehículo
