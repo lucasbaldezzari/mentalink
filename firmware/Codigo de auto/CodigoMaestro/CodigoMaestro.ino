@@ -1,3 +1,4 @@
+
 #include "Wire.h"
 #include <SoftwareSerial.h>       
 SoftwareSerial BTSerial(12,13);
@@ -30,11 +31,11 @@ void setup(){
 }
 
 void loop(){
-  if(Serial.available()){
-  //if(BTSerial.available()){
+  //if(Serial.available()){ //Movimiento por serial
+  if(BTSerial.available()){ //Movimiento por BT
     
-    MovimientoActual=Serial.read()-'0';
-    //MovimientoActual=BTSerial.read();
+    //MovimientoActual=Serial.read()-'0';
+    MovimientoActual=BTSerial.read();
     for(int i=1;i<7;i++){
       Codigos_de_Movimiento[i][11]=1;
       //Luego de enviarlo marca como que se puede mover
@@ -45,16 +46,16 @@ void loop(){
     int TiempoTranscurrido=0;
     //Serial.println("Iniciando : "+String(MovimientoActual)+"por "+String(Codigos_de_Movimiento[MovimientoActual][8])+"segs");
     while(TiempoTranscurrido<Codigos_de_Movimiento[MovimientoActual][8]){
-      if(Serial.available()){
-    //if(BTSerial.available()){
+      //if(Serial.available()){
+    if(BTSerial.available()){
         
-        MovimientoActual=Serial.read();
-        //MovimientoActual=BTSerial.read();
+        //MovimientoActual=Serial.read();
+        MovimientoActual=BTSerial.read();
         
         TiempoInicioMovimiento = millis();
         TiempoTranscurrido=0;
         
-        Serial.println(BTOut());
+        //Serial.println(BTOut());
         //BTSerial.write(BTOut());
         for(int i=1;i<7;i++){
           Codigos_de_Movimiento[i][11]=1;
@@ -81,8 +82,11 @@ void loop(){
       Motor(_Motor,Codigos_de_Movimiento[MovimientoActual][t],Codigos_de_Movimiento[MovimientoActual][t+1]);
       t+=2;
     }
-    Serial.println(BTOut());
+   // Serial.println(BTOut());
     //BTSerial.write(BTOut());
+    for(int i=1;i<7;i++){
+    Codigos_de_Movimiento[i][11]=1;
+    }
   }
 }
 

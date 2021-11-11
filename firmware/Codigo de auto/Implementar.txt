@@ -1,1 +1,1 @@
-Todavia queda Implementar las interrupciones y la separacion de bytes que nos envian por BT
+Todavia queda Implementar las interrupciones
