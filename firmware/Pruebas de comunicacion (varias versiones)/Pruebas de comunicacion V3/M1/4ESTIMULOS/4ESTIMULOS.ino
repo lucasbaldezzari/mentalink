@@ -45,21 +45,21 @@ char LEDVerde = 12;
 int frecTimer = 5000; //en Hz. Frecuencia de interrupción del timer.
 
 //estímulo adelante
-char estimAd = 10;
+char estimAd = 2;
 bool estimAdON = 0;//Esado que define si el LED se apgará o prenderá.
 int frecEstimAd = 6;
 int acumEstimAd = 0;
 const int estimAdMaxValue = (1/float(frecEstimAd))*frecTimer;
 
 //estímulo atras
-char estimAt = 11;
+char estimAt = 3;
 bool estimAtON = 0;//Esado que define si el LED se apgará o prenderá.
 int frecEstimAt = 7;
 int acumEstimAt = 0;
 const int estimAtMaxValue = (1/float(frecEstimAt))*frecTimer;
 
 //estímulo derecho
-char estimDer = 12;
+char estimDer = 11;
 bool estimDerON = 0;//Esado que define si el LED se apgará o prenderá.
 int frecEstimDer = 8;
 int acumEstimDer = 0;
@@ -102,8 +102,9 @@ int trialNumber = 1;
 ******************************************************************/
 
 char movimiento = 0; //Robot en STOP
+int estado = 0;
 
-SoftwareSerial BTMaestro(10,9); //RX, TX
+SoftwareSerial BTMaestro(10,9); //TX, RX
 
 //FUNCION SETUP
 void setup()
@@ -154,9 +155,9 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer0.
     if(BTMaestro.available()) //Si tenemos un mensaje por bluetooth lo leemos
   {
     backMensaje = BTMaestro.read();
-    if(backMensaje == 0b00000000) digitalWrite(LEDVerde, 0);
-    else digitalWrite(LEDVerde, 1);
     //checkBTMessage(backMensaje);
+    //estado = !estado;
+    //digitalWrite(LEDVerde,estado);
   }
 };
 
@@ -186,8 +187,10 @@ void stimuliControl()
     //control estímulo adelante
       if (++acumEstimAd >= estimAdMaxValue)
         {
+        if ((backMensaje & 0b00000001) != 0b00000001){ 
         estimAdON = !estimAdON;
         digitalWrite(estimAd,estimAdON);
+        }
         acumEstimAd = 0; 
       } 
       
@@ -195,8 +198,10 @@ void stimuliControl()
     //control estímulo atras
       if (++acumEstimAt >= estimAtMaxValue)
       {
+        if ((backMensaje & 0b00000010) != 0b00000010){
         estimAtON = !estimAtON;
         digitalWrite(estimAt,estimAtON);
+        }
         acumEstimAt = 0; 
       } 
       break;
@@ -261,8 +266,9 @@ Función: sendCommand()
 */
 void sendCommand()
 {
-    //byte mensaje = (incDataFromPC[0])|(incDataFromPC[1]<<1)|(incDataFromPC[2]<<2);//Armamos el byte
-    //BTMaestro.write(mensaje); //enviamos byte por bluetooth
-    BTMaestro.write(uno);
-    digitalWrite(LEDVerde,ON);
+    digitalWrite(LEDVerde,1);
+    byte mensaje = (incDataFromPC[0])|(incDataFromPC[1]<<1)|(incDataFromPC[2]<<2);//Armamos el byte
+    BTMaestro.write(mensaje); //enviamos byte por bluetooth
+    //BTMaestro.write(uno);
+    
 }

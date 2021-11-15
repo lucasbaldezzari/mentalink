@@ -29,8 +29,8 @@ void setup() {
   pinMode(Echo1, INPUT);  //pin como entrada
   pinMode(Trigger2, OUTPUT); //pin como salida
   pinMode(Echo2, INPUT);  //pin como entrada
-  digitalWrite(Trigger1, LOW);//Inicializamos el pin con 0
-  digitalWrite(Trigger2, LOW);//Inicializamos el pin con 0
+  digitalWrite(Trigger1, 0);//Inicializamos el pin con 0
+  digitalWrite(Trigger2, 0);//Inicializamos el pin con 0
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
   pinMode(LEDtest, OUTPUT);
@@ -78,28 +78,28 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
      if(obstaculos == 0b00000000) digitalWrite(LED1, 0);
     } 
     }  
-  if (contador == 10000){ //para que no se sature agrego 50ms entre ciclos
-    if (restTime = 'OFF'){ //si se debe enviar el eco
-      digitalWrite(Trigger2, HIGH);
-      restTime = 'ON'; //para que de un descanso de 10us antes de leer el eco
-    }
-    if (restTime = 'ON'){ //si se esta esperando el eco
-      digitalWrite(Trigger2, LOW);
-      t2 = pulseIn(Echo2, HIGH); //obtenemos el ancho del pulso
-      d2 = t2/59;             //escalamos el tiempo a una distancia en cm
-//      Serial.print("Distancia: ");
-//      Serial.print(d2);      //Enviamos serialmente el valor de la distancia
-//      Serial.print("cm");
-//      Serial.println();
-      contador = 0; //reinicio el contador para que al finalizar este if comience a contar 50ms
-      restTime = 'OFF'; //si se debe enviar el eco
-      if(d2<15){ 
-        digitalWrite(LED2, 1);
-        obstaculos = obstaculos | 0b00000010;
-        }
-      if(obstaculos == 0b00000000) digitalWrite(LED2, 0); 
-    }
-  } 
+//  if (contador == 10000){ //para que no se sature agrego 50ms entre ciclos
+//    if (restTime = 'OFF'){ //si se debe enviar el eco
+//      digitalWrite(Trigger2, HIGH);
+//      restTime = 'ON'; //para que de un descanso de 10us antes de leer el eco
+//    }
+//    if (restTime = 'ON'){ //si se esta esperando el eco
+//      digitalWrite(Trigger2, LOW);
+//      t2 = pulseIn(Echo2, HIGH); //obtenemos el ancho del pulso
+//      d2 = t2/59;             //escalamos el tiempo a una distancia en cm
+////      Serial.print("Distancia: ");
+////      Serial.print(d2);      //Enviamos serialmente el valor de la distancia
+////      Serial.print("cm");
+////      Serial.println();
+//      contador = 0; //reinicio el contador para que al finalizar este if comience a contar 50ms
+//      restTime = 'OFF'; //si se debe enviar el eco
+//      if(d2<15){ 
+//        digitalWrite(LED2, 1);
+//        obstaculos = obstaculos | 0b00000010;
+//        }
+//      if(obstaculos == 0b00000000) digitalWrite(LED2, 0); 
+//    }
+//  } 
   contador++; //suma al contador cada vez que se genera la interrupcion
 }
 //

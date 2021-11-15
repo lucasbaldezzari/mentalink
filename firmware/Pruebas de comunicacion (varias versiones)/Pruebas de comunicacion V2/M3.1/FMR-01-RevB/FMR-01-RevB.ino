@@ -4,7 +4,7 @@
 #define   FRENADO    1
 #define   MOVIENDO   0
 
-SoftwareSerial BTone(3, 4);  // pin 10 TX, pin 11 RX
+SoftwareSerial BTone(3, 4);  // TX, RX
 
 char Dt = 0;
 
@@ -67,7 +67,8 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 {
   if (BTone.available())
   {
-    digitalWrite(2,1);
+    estado = !estado;
+    digitalWrite(2,estado);
     Dt = BTone.read();    
     giveAnOrder();//damos una orden al vehículo
     //sendBTMessage();
