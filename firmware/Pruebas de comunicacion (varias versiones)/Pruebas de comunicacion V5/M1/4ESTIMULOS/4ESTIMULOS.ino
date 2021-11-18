@@ -171,16 +171,20 @@ void stimuliControl()
     //control estímulo izquierdo
       if (++acumEstimIz >= estimIzMaxValue)
       {
+        if ((backMensaje & 0b00000100) != 0b00000100){ 
         estimIzON = !estimIzON;
         digitalWrite(estimIz,estimIzON);
+        } 
         acumEstimIz = 0; 
       } 
       
     //control estímulo derecho
       if (++acumEstimDer >= estimDerMaxValue)
       {
+        if ((backMensaje & 0b00001000) != 0b00001000){
         estimDerON = !estimDerON;
         digitalWrite(estimDer,estimDerON);
+        }
         acumEstimDer = 0; 
       } 
       
