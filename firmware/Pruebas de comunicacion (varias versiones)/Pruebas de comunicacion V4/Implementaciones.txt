@@ -1,0 +1,2 @@
+Se acomodan pines de acuerdo a las pcb (aun no todos)
+Se implementa comunicacion Serial (uart) entre el M3.1 y el M3.2
