@@ -133,9 +133,10 @@ if (Serial.available() > 0)
   {
     char val = char(Serial.read()) - '0';
     checkMessage(val); //chequeamos mensaje entrante        
-    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
-      {Serial.write(internalStatus[index]);}
-      Serial.write("\n");
+    Serial.println(backMensaje);
+//    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
+//      {Serial.write(internalStatus[index]);}
+//      Serial.write("\n");
   }
 };
 
