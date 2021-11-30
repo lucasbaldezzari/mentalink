@@ -23,34 +23,28 @@ char flagMoviendo = FRENADO;
 byte mascaraComando = 0b00000111;
 
 unsigned int acumulador = 0;
+int EN = 10;
 
 // Motor A
-int ENA = 5;
 int IN1 = 6;
 int IN2 = 7;
 
 // Motor B
-int ENB = 10;
 int IN3 = 8;
 int IN4 = 9;
 
 // Motor C
-int ENC = 3;
 int IN5 = 2;
 int IN6 = 4;
 
 // Motor D
-int END = 11;
 int IN7 = 12;
 int IN8 = 13;
 
 void setup() {
   noInterrupts();//Deshabilito todas las interrupciFRENADOes
   //Motores
-  pinMode (ENA, OUTPUT);
-  pinMode (ENB, OUTPUT);
-  pinMode (ENC, OUTPUT);
-  pinMode (END, OUTPUT);
+  pinMode (EN, OUTPUT);
   pinMode (IN1, OUTPUT);
   pinMode (IN2, OUTPUT);
   pinMode (IN3, OUTPUT);
@@ -62,10 +56,7 @@ void setup() {
   pinMode (ledRojo, OUTPUT);
   pinMode (ledVerde, OUTPUT);
   pinMode (ledAzul, OUTPUT);
-  analogWrite (ENA, 0); //motores parados
-  analogWrite (ENB, 0); //motores parados
-  analogWrite (ENC, 0); //motores parados
-  analogWrite (END, 0); //motores parados
+  analogWrite (EN, 0); //motores parados
   BTone.begin(9600);
   Serial.begin(9600);
 
@@ -79,7 +70,25 @@ void loop() {
   //if (BTone.available()) digitalWrite(2,1);
   }
 
-/*Rutina interrupciòn Timer0*/
+void serialEvent()
+{
+  if (Serial.available())
+  {
+    obstaculos = Serial.read();  
+    if ((((obstaculos & 0b00000011) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00010000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b01000000) && (((Dt >> 2) & mascaraComando) == 4))){
+      Stop();
+    }
+    if ((((obstaculos & 0b00000011) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00100000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b10000000) && (((Dt >> 2) & mascaraComando) == 4))){
+      PWM = 125;
+    }
+    if ((((obstaculos & 0b00000011) == 0b00000011) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001100) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00110000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b11000000) && (((Dt >> 2) & mascaraComando) == 4))){
+      PWM = 200;
+    }
+    BTone.write(obstaculos);
+  }
+}
+
+/*Rutina interrupciòn Timer2*/
 ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 {
   if (BTone.available())
@@ -89,16 +98,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
     Dt = BTone.read();    
     giveAnOrder();//damos una orden al vehículo
     //sendBTMessage();
-    Serial.write(Dt);   
-  }
-
-  if (Serial.available())
-  {
-    obstaculos = Serial.read();
-    if (obstaculos != 0b00000000){
-      Stop();
-    }
-    BTone.write(obstaculos);
+    Serial.write(BTone.read());   
   }
 
   switch (flagMoviendo)
@@ -126,14 +126,11 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 
 void Adelante()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (EN, PWM);
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, HIGH);
   digitalWrite (IN3, LOW);
   digitalWrite (IN4, HIGH);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
   digitalWrite (IN5, LOW);
   digitalWrite (IN6, HIGH);
   digitalWrite (IN7, LOW);
@@ -142,14 +139,11 @@ void Adelante()
 
 void Retroceso()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (EN, PWM);
   digitalWrite (IN1, HIGH);
   digitalWrite (IN2, LOW);
   digitalWrite (IN3, HIGH);
   digitalWrite (IN4, LOW);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
   digitalWrite (IN5, HIGH);
   digitalWrite (IN6, LOW);
   digitalWrite (IN7, HIGH);
@@ -158,14 +152,11 @@ void Retroceso()
 
 void Derecha()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (EN, PWM);
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, HIGH);
   digitalWrite (IN3, HIGH);
   digitalWrite (IN4, LOW);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
   digitalWrite (IN5, LOW);
   digitalWrite (IN6, HIGH);
   digitalWrite (IN7, HIGH);
@@ -174,14 +165,11 @@ void Derecha()
 
 void Izquierda()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (EN, PWM);
   digitalWrite (IN1, HIGH);
   digitalWrite (IN2, LOW);
   digitalWrite (IN3, LOW);
   digitalWrite (IN4, HIGH);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
   digitalWrite (IN5, HIGH);
   digitalWrite (IN6, LOW);
   digitalWrite (IN7, LOW);
@@ -190,14 +178,11 @@ void Izquierda()
 
 void Stop()
 {
+  analogWrite (EN, 0); //motores parados
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, LOW);
   digitalWrite (IN3, LOW);
   digitalWrite (IN4, LOW);
-  analogWrite (ENA, 0); //motores parados
-  analogWrite (ENB, 0); //motores parados
-  analogWrite (ENC, 0);
-  analogWrite (END, 0);
   digitalWrite (IN5, LOW);
   digitalWrite (IN6, LOW);
   digitalWrite (IN7, LOW);
