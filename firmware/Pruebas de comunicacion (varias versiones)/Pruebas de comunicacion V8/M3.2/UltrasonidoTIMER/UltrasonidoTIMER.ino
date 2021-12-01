@@ -61,18 +61,8 @@ void loop()
 {
 }
 
-//ISR(TIMER1_COMPA_vect)//Rutina interrupción Timer1, configurado a 10us
-//{
-//  if (Serial.available()) {
-//    Serial.write(obstaculos);
-//    obstaculos = 0b00000000;
-//    estado = !estado;
-//    //digitalWrite(LEDtest, estado);
-//    recepcion = Serial.read();
-//  }
-//}
-
-void serialEvent(){
+ISR(TIMER1_COMPA_vect)//Rutina interrupción Timer1, configurado a 10us
+{
   if (Serial.available()) {
     Serial.write(obstaculos);
     obstaculos = 0b00000000;
@@ -84,7 +74,8 @@ void serialEvent(){
 
 ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
 {
-  if (contador == 2000) { //para que no se sature agrego 20ms entre ciclos
+
+  if (contador == 2000) { //para que no se sature agrego 50ms entre ciclos
     if (restTime = 'OFF') { //si se debe enviar el eco
       digitalWrite(TriggerAd, HIGH);
       restTime = 'ON'; //para que de un descanso de 10us antes de leer el eco
@@ -103,21 +94,11 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         digitalWrite(LEDAd, 1);
         obstaculos = obstaculos | 0b00000001;
         Serial.write(obstaculos);
-      }
-      if (d1 < 30) {
-        digitalWrite(LEDAd, 1);
-        obstaculos = obstaculos | 0b00000010;
-        Serial.write(obstaculos);
-      }
-      if (d1 < 50) {
-        digitalWrite(LEDAd, 1);
-        obstaculos = obstaculos | 0b00000011;
-        Serial.write(obstaculos);
-      }
+      }//si la distancia es menor a 15 cm encender el LED
       if (obstaculos == 0b00000000) digitalWrite(LEDAd, 0);
     }
   }
-  if (contador == 4000) { //para que no se sature agrego 20ms entre ciclos
+  if (contador == 4000) { //para que no se sature agrego 50ms entre ciclos
     if (restTime = 'OFF') { //si se debe enviar el eco
       digitalWrite(TriggerAt, HIGH);
       restTime = 'ON'; //para que de un descanso de 10us antes de leer el eco
@@ -134,17 +115,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       restTime = 'OFF'; //si se debe enviar el eco
       if (d2 < 15) {
         digitalWrite(LEDAt, 1);
-        obstaculos = obstaculos | 0b00000100;
-        Serial.write(obstaculos);
-      }
-      if (d2 < 30) {
-        digitalWrite(LEDAt, 1);
-        obstaculos = obstaculos | 0b00001000;
-        Serial.write(obstaculos);
-      }
-      if (d2 < 50) {
-        digitalWrite(LEDAt, 1);
-        obstaculos = obstaculos | 0b00001100;
+        obstaculos = obstaculos | 0b00000010;
         Serial.write(obstaculos);
       }
       if (obstaculos == 0b00000000) digitalWrite(LEDAt, 0);
@@ -167,19 +138,8 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       restTime = 'OFF'; //si se debe enviar el eco
       if (d3 < 15) {
         digitalWrite(LEDDer, 1);
-        obstaculos = obstaculos | 0b00010000;
+        obstaculos = obstaculos | 0b00000100;
         Serial.write(obstaculos);
-      }
-      if (d3 < 30) {
-        digitalWrite(LEDDer, 1);
-        obstaculos = obstaculos | 0b00100000;
-        Serial.write(obstaculos);
-      }
-      if (d3 < 50) {
-        digitalWrite(LEDDer, 1);
-        obstaculos = obstaculos | 0b00110000;
-        Serial.write(obstaculos);
-      }
       }//si la distancia es menor a 15 cm encender el LED
       if (obstaculos == 0b00000000) digitalWrite(LEDDer, 0);
     }
@@ -201,15 +161,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       restTime = 'OFF'; //si se debe enviar el eco
       if (d4 < 15) {
         digitalWrite(LEDIz, 1);
-        obstaculos = obstaculos | 0b01000000;
-        Serial.write(obstaculos);
-      if (d4 < 30) {
-        digitalWrite(LEDIz, 1);
-        obstaculos = obstaculos | 0b10000000;
-        Serial.write(obstaculos);
-      if (d4 < 50) {
-        digitalWrite(LEDIz, 1);
-        obstaculos = obstaculos | 0b11000000;
+        obstaculos = obstaculos | 0b00001000;
         Serial.write(obstaculos);
       }//si la distancia es menor a 15 cm encender el LED
       if (obstaculos == 0b00000000) digitalWrite(LEDIz, 0);

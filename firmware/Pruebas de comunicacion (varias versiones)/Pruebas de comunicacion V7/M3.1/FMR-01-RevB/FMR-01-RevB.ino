@@ -7,7 +7,6 @@
 SoftwareSerial BTone(A3, A4);  // TX, RX
 
 char Dt = 0;
-int PWM = 255;
 
 char ledRojo = A0;
 char ledVerde = A5;
@@ -25,7 +24,7 @@ byte mascaraComando = 0b00000111;
 unsigned int acumulador = 0;
 
 // Motor A
-int ENA = 5;
+int ENA = 10;
 int IN1 = 6;
 int IN2 = 7;
 
@@ -35,12 +34,12 @@ int IN3 = 8;
 int IN4 = 9;
 
 // Motor C
-int ENC = 3;
-int IN5 = 2;
-int IN6 = 4;
+int ENC = 10;
+int IN5 = 4;
+int IN6 = 2;
 
 // Motor D
-int END = 11;
+int END = 10;
 int IN7 = 12;
 int IN8 = 13;
 
@@ -89,7 +88,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
     Dt = BTone.read();    
     giveAnOrder();//damos una orden al vehículo
     //sendBTMessage();
-    Serial.write(Dt);   
+    Serial.write(BTone.read());   
   }
 
   if (Serial.available())
@@ -126,64 +125,64 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 
 void Adelante()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (ENA, 200);
+  analogWrite (ENB, 200);
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, LOW);
-  digitalWrite (IN8, HIGH);
-}
-
-void Retroceso()
-{
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
-  digitalWrite (IN1, HIGH);
-  digitalWrite (IN2, LOW);
   digitalWrite (IN3, HIGH);
   digitalWrite (IN4, LOW);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
+  analogWrite (ENC, 200);
+  analogWrite (END, 200);
+  digitalWrite (IN5, LOW);
+  digitalWrite (IN6, HIGH);
   digitalWrite (IN7, HIGH);
   digitalWrite (IN8, LOW);
 }
 
+void Retroceso()
+{
+  analogWrite (ENA, 200);
+  analogWrite (ENB, 200);
+  digitalWrite (IN1, HIGH );
+  digitalWrite (IN2, LOW);
+  digitalWrite (IN3, LOW );
+  digitalWrite (IN4, HIGH);
+  analogWrite (ENC, 200);
+  analogWrite (END, 200);
+  digitalWrite (IN5, HIGH);
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, LOW);
+  digitalWrite (IN8, HIGH);
+}
+
 void Derecha()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
-  digitalWrite (IN1, LOW);
+  analogWrite (ENA, 255);
+  analogWrite (ENB, 255);
+  digitalWrite (IN1, LOW); //atras izquierda
   digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, HIGH);
-  digitalWrite (IN4, LOW);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, HIGH);
+  digitalWrite (IN3, LOW); //atras derecha
+  digitalWrite (IN4, HIGH);
+  analogWrite (ENC, 255);
+  analogWrite (END, 255);
+  digitalWrite (IN5, HIGH); //adelante derecha
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, HIGH); //adelante izquierda
   digitalWrite (IN8, LOW);
 }
 
 void Izquierda()
 {
-  analogWrite (ENA, PWM);
-  analogWrite (ENB, PWM);
+  analogWrite (ENA, 255);
+  analogWrite (ENB, 255);
   digitalWrite (IN1, HIGH);
   digitalWrite (IN2, LOW);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  analogWrite (ENC, PWM);
-  analogWrite (END, PWM);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
+  digitalWrite (IN3, HIGH );
+  digitalWrite (IN4, LOW);
+  analogWrite (ENC, 255);
+  analogWrite (END, 255);
+  digitalWrite (IN5, LOW);
+  digitalWrite (IN6, HIGH);
   digitalWrite (IN7, LOW);
   digitalWrite (IN8, HIGH);
 }
@@ -213,8 +212,8 @@ void giveAnOrder()
     acum = 0;
     if ( ((Dt >> 2) & mascaraComando) == 1) Adelante();
     else if ( ((Dt >> 2) & mascaraComando) == 2) Izquierda();
-    else if ( ((Dt >> 2) & mascaraComando) == 3) Retroceso();
-    else if ( ((Dt >> 2) & mascaraComando) == 4 ) Derecha();
+    else if ( ((Dt >> 2) & mascaraComando) == 4) Retroceso();
+    else if ( ((Dt >> 2) & mascaraComando) == 3 ) Derecha();
     else    {
       Stop();
     }

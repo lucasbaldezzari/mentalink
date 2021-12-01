@@ -7,7 +7,6 @@
 SoftwareSerial BTone(A3, A4);  // TX, RX
 
 char Dt = 0;
-int PWM = 255;
 
 char ledRojo = A0;
 char ledVerde = A5;
@@ -23,28 +22,34 @@ char flagMoviendo = FRENADO;
 byte mascaraComando = 0b00000111;
 
 unsigned int acumulador = 0;
-int EN = 10;
 
 // Motor A
+int ENA = 10;
 int IN1 = 6;
 int IN2 = 7;
 
 // Motor B
+int ENB = 10;
 int IN3 = 8;
 int IN4 = 9;
 
 // Motor C
-int IN5 = 2;
-int IN6 = 4;
+int ENC = 10;
+int IN5 = 4;
+int IN6 = 2;
 
 // Motor D
+int END = 10;
 int IN7 = 12;
 int IN8 = 13;
 
 void setup() {
   noInterrupts();//Deshabilito todas las interrupciFRENADOes
   //Motores
-  pinMode (EN, OUTPUT);
+  pinMode (ENA, OUTPUT);
+  pinMode (ENB, OUTPUT);
+  pinMode (ENC, OUTPUT);
+  pinMode (END, OUTPUT);
   pinMode (IN1, OUTPUT);
   pinMode (IN2, OUTPUT);
   pinMode (IN3, OUTPUT);
@@ -56,7 +61,10 @@ void setup() {
   pinMode (ledRojo, OUTPUT);
   pinMode (ledVerde, OUTPUT);
   pinMode (ledAzul, OUTPUT);
-  analogWrite (EN, 0); //motores parados
+  analogWrite (ENA, 0); //motores parados
+  analogWrite (ENB, 0); //motores parados
+  analogWrite (ENC, 0); //motores parados
+  analogWrite (END, 0); //motores parados
   BTone.begin(9600);
   Serial.begin(9600);
 
@@ -70,25 +78,7 @@ void loop() {
   //if (BTone.available()) digitalWrite(2,1);
   }
 
-void serialEvent()
-{
-  if (Serial.available())
-  {
-    obstaculos = Serial.read();  
-    if ((((obstaculos & 0b00000011) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00010000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b01000000) && (((Dt >> 2) & mascaraComando) == 4))){
-      Stop();
-    }
-    if ((((obstaculos & 0b00000011) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00100000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b10000000) && (((Dt >> 2) & mascaraComando) == 4))){
-      PWM = 125;
-    }
-    if ((((obstaculos & 0b00000011) == 0b00000011) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001100) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00110000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b11000000) && (((Dt >> 2) & mascaraComando) == 4))){
-      PWM = 200;
-    }
-    BTone.write(obstaculos);
-  }
-}
-
-/*Rutina interrupciòn Timer2*/
+/*Rutina interrupciòn Timer0*/
 ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 {
   if (BTone.available())
@@ -99,6 +89,15 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
     giveAnOrder();//damos una orden al vehículo
     //sendBTMessage();
     Serial.write(BTone.read());   
+  }
+
+  if (Serial.available())
+  {
+    obstaculos = Serial.read();
+    if (obstaculos != 0b00000000){
+      Stop();
+    }
+    BTone.write(obstaculos);
   }
 
   switch (flagMoviendo)
@@ -126,63 +125,78 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 
 void Adelante()
 {
-  analogWrite (EN, PWM);
+  analogWrite (ENA, 200);
+  analogWrite (ENB, 200);
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, LOW);
-  digitalWrite (IN8, HIGH);
-}
-
-void Retroceso()
-{
-  analogWrite (EN, PWM);
-  digitalWrite (IN1, HIGH);
-  digitalWrite (IN2, LOW);
   digitalWrite (IN3, HIGH);
   digitalWrite (IN4, LOW);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
+  analogWrite (ENC, 200);
+  analogWrite (END, 200);
+  digitalWrite (IN5, LOW);
+  digitalWrite (IN6, HIGH);
   digitalWrite (IN7, HIGH);
   digitalWrite (IN8, LOW);
 }
 
+void Retroceso()
+{
+  analogWrite (ENA, 200);
+  analogWrite (ENB, 200);
+  digitalWrite (IN1, HIGH );
+  digitalWrite (IN2, LOW);
+  digitalWrite (IN3, LOW );
+  digitalWrite (IN4, HIGH);
+  analogWrite (ENC, 200);
+  analogWrite (END, 200);
+  digitalWrite (IN5, HIGH);
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, LOW);
+  digitalWrite (IN8, HIGH);
+}
+
 void Derecha()
 {
-  analogWrite (EN, PWM);
-  digitalWrite (IN1, LOW);
-  digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, HIGH);
+  analogWrite (ENA, 255);
+  analogWrite (ENB, 255);
+  digitalWrite (IN1, HIGH); //atras izquierda
+  digitalWrite (IN2, LOW);
+  digitalWrite (IN3, HIGH); //atras derecha
   digitalWrite (IN4, LOW);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, HIGH);
+  analogWrite (ENC, 255);
+  analogWrite (END, 255);
+  digitalWrite (IN5, HIGH); //adelante derecha
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, HIGH); //adelante izquierda
   digitalWrite (IN8, LOW);
 }
 
 void Izquierda()
 {
-  analogWrite (EN, PWM);
+  analogWrite (ENA, 255);
+  analogWrite (ENB, 255);
   digitalWrite (IN1, HIGH);
   digitalWrite (IN2, LOW);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
+  digitalWrite (IN3, HIGH );
+  digitalWrite (IN4, LOW);
+  analogWrite (ENC, 255);
+  analogWrite (END, 255);
+  digitalWrite (IN5, LOW);
+  digitalWrite (IN6, HIGH);
   digitalWrite (IN7, LOW);
   digitalWrite (IN8, HIGH);
 }
 
 void Stop()
 {
-  analogWrite (EN, 0); //motores parados
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, LOW);
   digitalWrite (IN3, LOW);
   digitalWrite (IN4, LOW);
+  analogWrite (ENA, 0); //motores parados
+  analogWrite (ENB, 0); //motores parados
+  analogWrite (ENC, 0);
+  analogWrite (END, 0);
   digitalWrite (IN5, LOW);
   digitalWrite (IN6, LOW);
   digitalWrite (IN7, LOW);
@@ -198,8 +212,8 @@ void giveAnOrder()
     acum = 0;
     if ( ((Dt >> 2) & mascaraComando) == 1) Adelante();
     else if ( ((Dt >> 2) & mascaraComando) == 2) Izquierda();
-    else if ( ((Dt >> 2) & mascaraComando) == 3) Retroceso();
-    else if ( ((Dt >> 2) & mascaraComando) == 4 ) Derecha();
+    else if ( ((Dt >> 2) & mascaraComando) == 4) Retroceso();
+    else if ( ((Dt >> 2) & mascaraComando) == 3 ) Derecha();
     else    {
       Stop();
     }

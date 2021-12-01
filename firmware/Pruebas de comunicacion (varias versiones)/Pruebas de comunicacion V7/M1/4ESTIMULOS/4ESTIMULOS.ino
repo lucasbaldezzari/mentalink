@@ -47,28 +47,28 @@ int frecTimer = 5000; //en Hz. Frecuencia de interrupción del timer.
 //estímulo adelante
 char estimAd = 13;
 bool estimAdON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimAd = 17;
+int frecEstimAd = 6;
 int acumEstimAd = 0;
 const int estimAdMaxValue = (1/float(frecEstimAd))*frecTimer;
 
 //estímulo atras
 char estimAt = 9;
 bool estimAtON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimAt = 17;
+int frecEstimAt = 7;
 int acumEstimAt = 0;
 const int estimAtMaxValue = (1/float(frecEstimAt))*frecTimer;
 
 //estímulo derecho
 char estimDer = 10;
 bool estimDerON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimDer = 17;
+int frecEstimDer = 8;
 int acumEstimDer = 0;
 const int estimDerMaxValue = (1/float(frecEstimDer))*frecTimer;
 
 //estímulo izquierdo
 char estimIz = 12;
 bool estimIzON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimIz = 14;
+int frecEstimIz = 9;
 int acumEstimIz = 0;
 const int estimIzMaxValue = (1/float(frecEstimIz))*frecTimer;
 //
@@ -133,10 +133,9 @@ if (Serial.available() > 0)
   {
     char val = char(Serial.read()) - '0';
     checkMessage(val); //chequeamos mensaje entrante        
-    Serial.println(backMensaje);
-//    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
-//      {Serial.write(internalStatus[index]);}
-//      Serial.write("\n");
+    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
+      {Serial.write(internalStatus[index]);}
+      Serial.write("\n");
   }
 };
 
