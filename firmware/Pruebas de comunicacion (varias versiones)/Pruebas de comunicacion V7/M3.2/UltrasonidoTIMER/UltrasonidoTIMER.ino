@@ -118,7 +118,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         obstaculos = obstaculos | 0b00000010;
         Serial.write(obstaculos);
       }
-      if (obstaculos == 0b00000000) digitalWrite(LEDAt, 0);
+      if (obstaculos == 0b00000000) digitalWrite(LEDAt, LOW);
     }
   }
    if (contador == 6000) { //para que no se sature agrego 50ms entre ciclos
@@ -141,7 +141,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         obstaculos = obstaculos | 0b00000100;
         Serial.write(obstaculos);
       }//si la distancia es menor a 15 cm encender el LED
-      if (obstaculos == 0b00000000) digitalWrite(LEDDer, 0);
+      if (obstaculos == 0b00000000) digitalWrite(LEDDer, LOW);
     }
   }
    if (contador == 8000) { //para que no se sature agrego 50ms entre ciclos
