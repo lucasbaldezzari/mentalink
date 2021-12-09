@@ -133,9 +133,10 @@ if (Serial.available() > 0)
   {
     char val = char(Serial.read()) - '0';
     checkMessage(val); //chequeamos mensaje entrante        
-    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
-      {Serial.write(internalStatus[index]);}
-      Serial.write("\n");
+    Serial.println(backMensaje);
+//    for(int index = 0; index < internalStatusBuff; index++) //enviamos estado 
+//      {Serial.write(internalStatus[index]);}
+//      Serial.write("\n");
   }
 };
 
@@ -171,7 +172,7 @@ void stimuliControl()
     //control estímulo izquierdo
       if (++acumEstimIz >= estimIzMaxValue)
       {
-        if ((backMensaje & 0b00000100) != 0b00000100){ 
+        if ((backMensaje & 0b01000000) != 0b01000000){ 
         estimIzON = !estimIzON;
         digitalWrite(estimIz,estimIzON);
         } 
@@ -181,7 +182,7 @@ void stimuliControl()
     //control estímulo derecho
       if (++acumEstimDer >= estimDerMaxValue)
       {
-        if ((backMensaje & 0b00001000) != 0b00001000){
+        if ((backMensaje & 0b00010000) != 0b00010000){
         estimDerON = !estimDerON;
         digitalWrite(estimDer,estimDerON);
         }
@@ -203,7 +204,7 @@ void stimuliControl()
     //control estímulo atras
       if (++acumEstimAt >= estimAtMaxValue)
       {
-        if ((backMensaje & 0b00000010) != 0b00000010){
+        if ((backMensaje & 0b00000100) != 0b00000100){
         estimAtON = !estimAtON;
         digitalWrite(estimAt,estimAtON);
         }
@@ -276,5 +277,4 @@ void sendCommand()
     byte mensaje = (incDataFromPC[0])|(incDataFromPC[1]<<1)|(incDataFromPC[2]<<2);//Armamos el byte
     BTMaestro.write(mensaje); //enviamos byte por bluetooth
     //BTMaestro.write(uno);
-    
 }

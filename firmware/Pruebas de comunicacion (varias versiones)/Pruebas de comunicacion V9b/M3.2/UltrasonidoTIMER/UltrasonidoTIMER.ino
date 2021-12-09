@@ -75,15 +75,15 @@ void loop()
 //  }
 //}
 
-void serialEvent(){
-  if (Serial.available()) {
-    Serial.write(obstaculos);
-    obstaculos = 0b00000000;
-    estado = !estado;
-    //digitalWrite(LEDtest, estado);
-    recepcion = Serial.read();
-  }
-}
+//void serialEvent(){
+//  if (Serial.available()) {
+//    Serial.write(obstaculos);
+//    obstaculos = 0b00000000;
+//    estado = !estado;
+//    //digitalWrite(LEDtest, estado);
+//    recepcion = Serial.read();
+//  }
+//}
 
 ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
 {  
@@ -96,7 +96,7 @@ if (Serial.available()) {
   recepcion = Serial.read();
 }
 
-if ((recepcion & 0b00000010) == 0b00000000){    
+//if ((recepcion & 0b00000010) == 0b00000000){    
   if (contador == 2000) { //para que no se sature agrego 20ms entre ciclos
     if (restTime = 'OFF') { //si se debe enviar el eco
       digitalWrite(TriggerAd, HIGH);
@@ -221,7 +221,7 @@ if ((recepcion & 0b00000010) == 0b00000000){
         flagVel1 = 0;
         flagVel2 = 0;
       }
-      else if ((d3 < 30) && (flagVel1 == 0) && (flagDetenido == 0)){
+      if ((d3 < 30) && (flagVel1 == 0) && (flagDetenido == 0)){
         digitalWrite(LEDDer, 1);
         obstaculos = obstaculos | 0b00100000;
         Serial.write(obstaculos);
@@ -229,7 +229,7 @@ if ((recepcion & 0b00000010) == 0b00000000){
         flagVel1 = 1;
         flagVel2 = 0;
       }
-      else if ((d3 < 50) && (flagVel1 == 0) && (flagVel2 == 0) && (flagDetenido == 0)){
+      if ((d3 < 50) && (flagVel1 == 0) && (flagVel2 == 0) && (flagDetenido == 0)){
         digitalWrite(LEDDer, 1);
         obstaculos = obstaculos | 0b00110000;
         Serial.write(obstaculos);
@@ -237,7 +237,7 @@ if ((recepcion & 0b00000010) == 0b00000000){
         flagVel1 = 0;
         flagVel2 = 1;
       }
-      else {
+      if (d3 > 50) {
         digitalWrite(LEDDer, 0);
         obstaculos = 0b00000000;
         Serial.write(obstaculos);
@@ -299,7 +299,7 @@ if ((recepcion & 0b00000010) == 0b00000000){
   contador++; //suma al contador cada vez que se genera la interrupcion
 }
 }
-}
+//}
 //
 //void SendMenssage(byte mensaje){
 //  BTEsclavo.write(mensaje);

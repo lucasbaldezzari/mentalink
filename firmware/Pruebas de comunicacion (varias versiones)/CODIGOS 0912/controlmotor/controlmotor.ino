@@ -4,10 +4,11 @@
 #define   FRENADO    1
 #define   MOVIENDO   0
 
+
 SoftwareSerial BTone(A3, A4);  // TX, RX
 
 char Dt = 0;
-int PWM = 255;
+int PWM = 120;
 
 char ledRojo = A0;
 char ledVerde = A5;
@@ -41,6 +42,7 @@ int IN6 = 4;
 int IN7 = 12;
 int IN8 = 13;
 
+
 void setup() {
   noInterrupts();//Deshabilito todas las interrupciFRENADOes
   //Motores
@@ -59,6 +61,7 @@ void setup() {
   analogWrite (EN, 0); //motores parados
   BTone.begin(9600);
   Serial.begin(9600);
+
 
   iniTimer2();
   delay(1000);
@@ -104,15 +107,15 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
   if (Serial.available())
   {
     obstaculos = Serial.read();  
-    if ((((obstaculos & 0b00000011) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00110000) == 0b00010000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b01000000) && (((Dt >> 2) & mascaraComando) == 2))){
+    if ((((obstaculos & 0b00000011) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00110000) == 0b00010000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b11000000) == 0b01000000) && (((Dt >> 2) & mascaraComando) == 3))){
       Stop();
     }
-    if ((((obstaculos & 0b00000011) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00110000) == 0b00100000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b10000000) && (((Dt >> 2) & mascaraComando) == 2))){
-      PWM = 125;
-    }
-    if ((((obstaculos & 0b00000011) == 0b00000011) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001100) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00110000) == 0b00110000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b11000000) && (((Dt >> 2) & mascaraComando) == 2))){
-      PWM = 200;
-    }
+//    if ((((obstaculos & 0b00000011) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00100000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b10000000) && (((Dt >> 2) & mascaraComando) == 4))){
+//      PWM = 125;
+//    }
+//    if ((((obstaculos & 0b00000011) == 0b00000011) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001100) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00110000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b11000000) && (((Dt >> 2) & mascaraComando) == 4))){
+//      PWM = 200;
+//    }
 //    else PWM = 255;
     BTone.write(obstaculos);
   }
@@ -204,6 +207,7 @@ void Stop()
   digitalWrite (IN7, LOW);
   digitalWrite (IN8, LOW);
 }
+
 void giveAnOrder()
 {
   if ( ( (Dt >> 1) & 0b00000001) == 0 ) //Si los estímulos se apagarFRENADO, podemos mover.
@@ -214,7 +218,7 @@ void giveAnOrder()
     if ( ((Dt >> 2) & mascaraComando) == 1) Adelante();
     else if ( ((Dt >> 2) & mascaraComando) == 2) Izquierda();
     else if ( ((Dt >> 2) & mascaraComando) == 4) Retroceso();
-    else if ( ((Dt >> 2) & mascaraComando) == 3) Derecha();
+    else if ( ((Dt >> 2) & mascaraComando) == 3 ) Derecha();
     else    {
       Stop();
     }

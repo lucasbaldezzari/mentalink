@@ -35,7 +35,7 @@ char incDataFromRobotIndex = 0;
   Variables para el control de flujo de programa
 ******************************************************************/
 char sessionState = 0; //Sesión sin iniciar
-char LEDVerde = 11; 
+char LEDVerde = 8; 
 //char LEDTesteo = 5; //led de testeo
 
 /******************************************************************
@@ -45,30 +45,30 @@ char LEDVerde = 11;
 int frecTimer = 5000; //en Hz. Frecuencia de interrupción del timer.
 
 //estímulo adelante
-char estimAd = 13;
+char estimAd = 10;
 bool estimAdON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimAd = 6;
+int frecEstimAd = 14;
 int acumEstimAd = 0;
 const int estimAdMaxValue = (1/float(frecEstimAd))*frecTimer;
 
 //estímulo atras
-char estimAt = 9;
+char estimAt = 13;
 bool estimAtON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimAt = 7;
+int frecEstimAt = 26;
 int acumEstimAt = 0;
 const int estimAtMaxValue = (1/float(frecEstimAt))*frecTimer;
 
 //estímulo derecho
-char estimDer = 10;
+char estimDer = 11;
 bool estimDerON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimDer = 8;
+int frecEstimDer = 20;
 int acumEstimDer = 0;
 const int estimDerMaxValue = (1/float(frecEstimDer))*frecTimer;
 
 //estímulo izquierdo
 char estimIz = 12;
 bool estimIzON = 0;//Esado que define si el LED se apgará o prenderá.
-int frecEstimIz = 9;
+int frecEstimIz = 17;
 int acumEstimIz = 0;
 const int estimIzMaxValue = (1/float(frecEstimIz))*frecTimer;
 //
@@ -172,7 +172,7 @@ void stimuliControl()
     //control estímulo izquierdo
       if (++acumEstimIz >= estimIzMaxValue)
       {
-        if ((backMensaje & 0b00000100) != 0b01000000){ 
+        if ((backMensaje & 0b01000000) != 0b01000000){ 
         estimIzON = !estimIzON;
         digitalWrite(estimIz,estimIzON);
         } 
@@ -182,7 +182,7 @@ void stimuliControl()
     //control estímulo derecho
       if (++acumEstimDer >= estimDerMaxValue)
       {
-        if ((backMensaje & 0b00001000) != 0b00010000){
+        if ((backMensaje & 0b00010000) != 0b00010000){
         estimDerON = !estimDerON;
         digitalWrite(estimDer,estimDerON);
         }
@@ -204,7 +204,7 @@ void stimuliControl()
     //control estímulo atras
       if (++acumEstimAt >= estimAtMaxValue)
       {
-        if ((backMensaje & 0b00000010) != 0b00000100){
+        if ((backMensaje & 0b00000100) != 0b00000100){
         estimAtON = !estimAtON;
         digitalWrite(estimAt,estimAtON);
         }
@@ -277,5 +277,4 @@ void sendCommand()
     byte mensaje = (incDataFromPC[0])|(incDataFromPC[1]<<1)|(incDataFromPC[2]<<2);//Armamos el byte
     BTMaestro.write(mensaje); //enviamos byte por bluetooth
     //BTMaestro.write(uno);
-    
 }

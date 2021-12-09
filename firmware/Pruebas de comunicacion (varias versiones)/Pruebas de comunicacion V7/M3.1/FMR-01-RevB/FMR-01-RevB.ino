@@ -30,18 +30,18 @@ int IN2 = 7;
 
 // Motor B
 int ENB = 10;
-int IN3 = 9;
-int IN4 = 8;
+int IN3 = 8;
+int IN4 = 9;
 
 // Motor C
 int ENC = 10;
-int IN5 = 2;
-int IN6 = 4;
+int IN5 = 4;
+int IN6 = 2;
 
 // Motor D
 int END = 10;
-int IN7 = 13;
-int IN8 = 12;
+int IN7 = 12;
+int IN8 = 13;
 
 void setup() {
   noInterrupts();//Deshabilito todas las interrupciFRENADOes
@@ -125,27 +125,11 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 
 void Adelante()
 {
-  analogWrite (ENA, 200); 
-  analogWrite (ENB, 200);
-  digitalWrite (IN1, HIGH); //ADELANTE IZ HIGH
-  digitalWrite (IN2, LOW); 
-  digitalWrite (IN3, LOW); //HIHG ATRAS DER
-  digitalWrite (IN4, HIGH);//
-  analogWrite (ENC, 200);
-  analogWrite (END, 200);
-  digitalWrite (IN5, HIGH);//DELANTE DER
-  digitalWrite (IN6, LOW);
-  digitalWrite (IN7, LOW);//HIGH ATRAS IZ
-  digitalWrite (IN8, HIGH);
-}
-
-void Retroceso()
-{
   analogWrite (ENA, 200);
   analogWrite (ENB, 200);
   digitalWrite (IN1, LOW);
   digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, HIGH );
+  digitalWrite (IN3, HIGH);
   digitalWrite (IN4, LOW);
   analogWrite (ENC, 200);
   analogWrite (END, 200);
@@ -155,19 +139,35 @@ void Retroceso()
   digitalWrite (IN8, LOW);
 }
 
+void Retroceso()
+{
+  analogWrite (ENA, 200);
+  analogWrite (ENB, 200);
+  digitalWrite (IN1, HIGH );
+  digitalWrite (IN2, LOW);
+  digitalWrite (IN3, LOW );
+  digitalWrite (IN4, HIGH);
+  analogWrite (ENC, 200);
+  analogWrite (END, 200);
+  digitalWrite (IN5, HIGH);
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, LOW);
+  digitalWrite (IN8, HIGH);
+}
+
 void Derecha()
 {
   analogWrite (ENA, 255);
   analogWrite (ENB, 255);
-  digitalWrite (IN1, HIGH); 
-  digitalWrite (IN2, LOW);
-  digitalWrite (IN3, LOW); 
+  digitalWrite (IN1, LOW); //atras izquierda
+  digitalWrite (IN2, HIGH);
+  digitalWrite (IN3, LOW); //atras derecha
   digitalWrite (IN4, HIGH);
   analogWrite (ENC, 255);
   analogWrite (END, 255);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, HIGH); 
+  digitalWrite (IN5, HIGH); //adelante derecha
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, HIGH); //adelante izquierda
   digitalWrite (IN8, LOW);
 }
 
@@ -175,14 +175,14 @@ void Izquierda()
 {
   analogWrite (ENA, 255);
   analogWrite (ENB, 255);
-  digitalWrite (IN1, LOW);
-  digitalWrite (IN2, HIGH);
+  digitalWrite (IN1, HIGH);
+  digitalWrite (IN2, LOW);
   digitalWrite (IN3, HIGH );
   digitalWrite (IN4, LOW);
   analogWrite (ENC, 255);
   analogWrite (END, 255);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
+  digitalWrite (IN5, LOW);
+  digitalWrite (IN6, HIGH);
   digitalWrite (IN7, LOW);
   digitalWrite (IN8, HIGH);
 }
