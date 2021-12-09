@@ -1,0 +1,3 @@
+Arreglo de "pisamientos" entre los codigos
+Implementacion de desaceleración o aceleración dependiendo la distancia al obstaculo
+Implementación del frenado unicamente cuando el vehículo se mueve en la dirección del obstaculo detectado
