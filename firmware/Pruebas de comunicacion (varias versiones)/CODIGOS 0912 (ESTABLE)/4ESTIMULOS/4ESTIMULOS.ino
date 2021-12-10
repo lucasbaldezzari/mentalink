@@ -172,7 +172,7 @@ void stimuliControl()
     //control estímulo izquierdo
       if (++acumEstimIz >= estimIzMaxValue)
       {
-        if ((backMensaje & 0b01000000) != 0b01000000){ 
+        if ((backMensaje & 0b00000010) != 0b00000010){ 
         estimIzON = !estimIzON;
         digitalWrite(estimIz,estimIzON);
         } 
@@ -182,7 +182,7 @@ void stimuliControl()
     //control estímulo derecho
       if (++acumEstimDer >= estimDerMaxValue)
       {
-        if ((backMensaje & 0b00010000) != 0b00010000){
+        if ((backMensaje & 0b00000100) != 0b00000100){
         estimDerON = !estimDerON;
         digitalWrite(estimDer,estimDerON);
         }
@@ -204,7 +204,7 @@ void stimuliControl()
     //control estímulo atras
       if (++acumEstimAt >= estimAtMaxValue)
       {
-        if ((backMensaje & 0b00000100) != 0b00000100){
+        if ((backMensaje & 0b00001000) != 0b00001000){
         estimAtON = !estimAtON;
         digitalWrite(estimAt,estimAtON);
         }

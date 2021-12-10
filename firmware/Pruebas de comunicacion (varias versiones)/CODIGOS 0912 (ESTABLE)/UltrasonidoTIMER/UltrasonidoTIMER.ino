@@ -5,10 +5,10 @@ const int TriggerAd = 5;   //Pin digital
 const int EchoAd = 4;   //Pin digital
 const int TriggerAt = 12;   //Pin digital
 const int EchoAt = 11;   //Pin digital
-const int TriggerDer = A0;   //Pin digital
-const int EchoDer = A1;   //Pin digital
-const int TriggerIz = A4;   //Pin digital
-const int EchoIz = A5;   //Pin digital
+const int TriggerDer = A4;   //Pin digital
+const int EchoDer = A5;   //Pin digital
+const int TriggerIz = A0;   //Pin digital A0
+const int EchoIz = A1;   //Pin digital A1
 long t1; //timepo que demora en llegar el eco
 long d1; //distancia en centimetros
 long t2; //timepo que demora en llegar el eco
@@ -99,7 +99,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       //      Serial.println();
       //contador = 0;
       restTime = 'OFF'; //si se debe enviar el eco
-      if (d1 < 15) {
+      if (d1 < 30) {
         digitalWrite(LEDAd, 1);
         obstaculos = obstaculos | 0b00000001;
         Serial.write(obstaculos);
@@ -133,9 +133,9 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       //      Serial.println();
       //contador = 0; //reinicio el contador para que al finalizar este if comience a contar 50ms
       restTime = 'OFF'; //si se debe enviar el eco
-      if (d2 < 15) {
+      if (d2 < 30) {
         digitalWrite(LEDAt, 1);
-        obstaculos = obstaculos | 0b00000100;
+        obstaculos = obstaculos | 0b00001000;
         Serial.write(obstaculos);
       }
 //      if (d2 < 30) {
@@ -166,9 +166,9 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       //      Serial.println();
       //contador = 0;
       restTime = 'OFF'; //si se debe enviar el eco
-      if (d3 < 15) {
+      if (d3 < 30) {
         digitalWrite(LEDDer, 1);
-        obstaculos = obstaculos | 0b00010000;
+        obstaculos = obstaculos | 0b00000100;
         Serial.write(obstaculos);
       }
 //      if (d3 < 30) {
@@ -200,9 +200,9 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
       //      Serial.println();
       contador = 0;
       restTime = 'OFF'; //si se debe enviar el eco
-      if (d4 < 15) {
+      if (d4 < 30) {
         digitalWrite(LEDIz, 1);
-        obstaculos = obstaculos | 0b01000000;
+        obstaculos = obstaculos | 0b00000010;
         Serial.write(obstaculos);
           }
 //      if (d4 < 30) {

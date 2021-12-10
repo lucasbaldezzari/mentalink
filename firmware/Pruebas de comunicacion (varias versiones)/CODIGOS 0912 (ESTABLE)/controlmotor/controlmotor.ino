@@ -8,7 +8,8 @@
 SoftwareSerial BTone(A3, A4);  // TX, RX
 
 char Dt = 0;
-int PWM = 120;
+int PWM = 100;
+int PWM2 = 50;
 
 char ledRojo = A0;
 char ledVerde = A5;
@@ -107,7 +108,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
   if (Serial.available())
   {
     obstaculos = Serial.read();  
-    if ((((obstaculos & 0b00000011) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00110000) == 0b00010000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b11000000) == 0b01000000) && (((Dt >> 2) & mascaraComando) == 3))){
+    if ((((obstaculos & 0b00000001) == 0b00000001) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001000) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 4)) || (((obstaculos & 0b00000010) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00000100) == 0b00000100) && (((Dt >> 2) & mascaraComando) == 3))){
       Stop();
     }
 //    if ((((obstaculos & 0b00000011) == 0b00000010) && (((Dt >> 2) & mascaraComando) == 1)) || (((obstaculos & 0b00001100) == 0b00001000) && (((Dt >> 2) & mascaraComando) == 2)) || (((obstaculos & 0b00110000) == 0b00100000) && (((Dt >> 2) & mascaraComando) == 3)) || (((obstaculos & 0b11000000) == 0b10000000) && (((Dt >> 2) & mascaraComando) == 4))){
@@ -146,30 +147,17 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 void Adelante()
 {
   analogWrite (EN, PWM);
-  digitalWrite (IN1, HIGH);//adelante izq 
-  digitalWrite (IN2, LOW);
-  digitalWrite (IN3, HIGH);// atras der
-  digitalWrite (IN4, LOW);
-  digitalWrite (IN5, HIGH);//adelante der
+  digitalWrite (IN1, LOW);//adelante der
+  digitalWrite (IN2, HIGH); //HIGH
+  digitalWrite (IN3, LOW);// atras der
+  digitalWrite (IN4, HIGH); //HIGH
+  digitalWrite (IN5, HIGH);//adelante iz HIGH
   digitalWrite (IN6, LOW);
-  digitalWrite (IN7, HIGH); // atras IZQ 
-  digitalWrite (IN8, LOW);
+  digitalWrite (IN7, LOW); // atras IZQ 
+  digitalWrite (IN8, HIGH); //HIGH
 }
 
 void Retroceso()
-{
-  analogWrite (EN, PWM);
-  digitalWrite (IN1, LOW);
-  digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  digitalWrite (IN5, LOW);
-  digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, LOW);
-  digitalWrite (IN8, HIGH);
-}
-
-void Derecha()
 {
   analogWrite (EN, PWM);
   digitalWrite (IN1, HIGH);
@@ -178,21 +166,34 @@ void Derecha()
   digitalWrite (IN4, LOW);
   digitalWrite (IN5, LOW);
   digitalWrite (IN6, HIGH);
-  digitalWrite (IN7, LOW);
-  digitalWrite (IN8, HIGH);
+  digitalWrite (IN7, HIGH);
+  digitalWrite (IN8, LOW);
+}
+
+void Derecha()
+{
+  analogWrite (EN, PWM2);
+  digitalWrite (IN1, HIGH);
+  digitalWrite (IN2, LOW);
+  digitalWrite (IN3, LOW);
+  digitalWrite (IN4, HIGH);
+  digitalWrite (IN5, HIGH);//adelante iz HIGH
+  digitalWrite (IN6, LOW);
+  digitalWrite (IN7, HIGH); // atras IZQ 
+  digitalWrite (IN8, LOW); //HIGH
 }
 
 void Izquierda()
 {
-  analogWrite (EN, PWM);
-  digitalWrite (IN1, LOW);
+  analogWrite (EN, PWM2);
+  digitalWrite (IN1, LOW);//adelante der
   digitalWrite (IN2, HIGH);
-  digitalWrite (IN3, LOW);
-  digitalWrite (IN4, HIGH);
-  digitalWrite (IN5, HIGH);
-  digitalWrite (IN6, LOW);
-  digitalWrite (IN7, HIGH);
-  digitalWrite (IN8, LOW);
+  digitalWrite (IN3, HIGH);
+  digitalWrite (IN4, LOW);
+  digitalWrite (IN5, LOW);//adelante iz HIGH
+  digitalWrite (IN6, HIGH);
+  digitalWrite (IN7, LOW); // atras IZQ 
+  digitalWrite (IN8, HIGH); //HIGH
 }
 
 void Stop()
