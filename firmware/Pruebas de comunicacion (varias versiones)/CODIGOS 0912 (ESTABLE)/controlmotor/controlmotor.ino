@@ -8,8 +8,8 @@
 SoftwareSerial BTone(A3, A4);  // TX, RX
 
 char Dt = 0;
-int PWM = 100;
-int PWM2 = 50;
+int PWM = 150;
+int PWM2 = 100;
 
 char ledRojo = A0;
 char ledVerde = A5;
