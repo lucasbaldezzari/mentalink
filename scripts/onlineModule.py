@@ -120,13 +120,13 @@ def main():
     cantCanalesAUsar = 2 #Cantidad de canales a utilizar
     canalesAUsar = [1,2] #Seleccionamos canal uno y dos. NOTA: Si quisieramos elegir el canal 2 solamente debemos hacer [2,2] o [1,1] para elegir el canal 1
 
-    trialsAPromediar = 2
+    cantidadTrials = 4 #cantidad de trials. Sirve para la sesión de entrenamiento.
+    trialsAPromediar = 3
     contadorTrials = 0
     flagConTrials = True
-    cantidadTrials = 1 #cantidad de trials. Sirve para la sesión de entrenamiento.
     trials = cantidadTrials * trialsAPromediar
-    trialDuration = 8 #secs #IMPORTANTE: trialDuration SIEMPRE debe ser MAYOR a stimuliDuration
-    stimuliDuration = 5 #secs
+    trialDuration = 6 #secs #IMPORTANTE: trialDuration SIEMPRE debe ser MAYOR a stimuliDuration
+    stimuliDuration = 4 #secs
 
     classifyData = True #True en caso de querer clasificar la señal de EEG
     fm = BoardShim.get_sampling_rate(placa)    
@@ -135,9 +135,9 @@ def main():
     equipo = "mentalink"
 
     if equipo == "mentalink":
-        frecStimulus = np.array([6, 7, 8])
+        frecStimulus = np.array([7, 85, 10])
         listaEstims = frecStimulus.copy().tolist()
-        movements = [b'1', b'2', b'3'] #1 adelante, 2 atrás, 3 derecha, 4 atrás
+        movements = [b'1', b'2', b'3'] #1 adelante, 2 izq, 3 derecha, 4 atrás
 
     if equipo == "neurorace":
         frecStimulus = np.array([11, 7, 9]) #11:adelante, 7:izquierda, 9:derecha, 13:atrás
@@ -155,8 +155,8 @@ def main():
 
     if modelo == "svm":
         #### Cargamos clasificador SVM ###
-        modelName = "SVM_test_linear" #Nombre archivo que contiene el modelo SVM
-        signalPSDName = "SVM_test_linear_signalPSD.txt"
+        modelName = "svm_walter_rbf" #Nombre archivo que contiene el modelo SVM
+        signalPSDName = "svm_walter_rbf_signalPSD.txt"
         modeloClasificador = "SVM"
 
         PRE_PROCES_PARAMS, FFT_PARAMS = fa.loadPArams(modelName = modelName, path = os.path.join(actualFolder,"models"))
@@ -322,7 +322,7 @@ def main():
     try:
         while arduino.generalControl() == b"1":
 
-            if classifyData and arduino.systemControl[1] == b"0":
+            if classifyData and arduino.systemControl[1] == b"0": #se apagan los estímulos y chequeamos si estamos para clasificar la señal de eeg
                 contadorTrials += 1
                 currentData = data_thread.getData(stimuliDuration)
                 EEGTrialsAveraged.append(currentData)
@@ -331,7 +331,7 @@ def main():
                     rawEEG = rawEEG[canalesAUsar[0]-1:canalesAUsar[1], descarteInicial:descarteFinal]
                     rawEEG = rawEEG - rawEEG.mean(axis = 1, keepdims=True) #resto media la media a la señal
                     print("tipo",type(arduino.estadoRobot),arduino.estadoRobot)
-                    clasificador.obstacles = arduino.estadoRobot
+                    clasificador.obstacles = str(arduino.estadoRobot) #actalizamos tabla de obstáculos
                     print(f'Obstaculos en: {arduino.estadoRobot}')
                     frecClasificada = clasificar(rawEEG, modeloClasificador, clasificador, anchoVentana = anchoVentana, bw = 2., order = 4, axis = 0)
                     print(f"Comando a enviar {movements[listaEstims.index(frecClasificada)]}. Frecuencia {frecClasificada}")
@@ -341,7 +341,8 @@ def main():
                     EEGTrialsAveraged = []
                 classifyData = False
 
-            elif classifyData == False and arduino.systemControl[1] == b"1":
+            elif classifyData == False and arduino.systemControl[1] == b"1": #Se encienden estímulos y se habilita para más adelante la clasificación
+                arduino.systemControl[2] = b'0' #cargamos movimiento STOP
                 classifyData = True
         
     except BaseException as e:
