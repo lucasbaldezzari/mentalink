@@ -20,7 +20,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import brainflow
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds, BrainFlowError
 from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, WindowFunctions, DetrendOperations
-
+from PyQt5.QtWidgets import QLabel
 import threading
 
 class GraphModule(threading.Thread):
@@ -135,7 +135,8 @@ class GraphModule(threading.Thread):
         self._init_timeseries()
         self._init_psd()
         self._init_band_plot()
-
+        self.label = QLabel(self)
+        self.label.setText("HOLA")
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
         timer.start(self.update_speed_ms)
