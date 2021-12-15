@@ -296,7 +296,12 @@ def main():
     #En el caso de querer ejecutar Trials de manera indeterminada,
     #debe hacerse trials = None (default)
     """
-    ard = ArduinoCommunication('COM5', moveDuration = 1, stimONTime = 4, restTime = 2,
+
+    moveDuration = 1
+    stimONTime = 4
+    restTime = 4-moveDuration
+
+    ard = ArduinoCommunication('COM10', moveDuration = moveDuration, stimONTime = stimONTime, restTime = restTime,
                                timing = 100, ntrials = 20)
     time.sleep(1)
     ard.iniSesion()

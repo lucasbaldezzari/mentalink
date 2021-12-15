@@ -127,8 +127,8 @@ def main():
     contadorTrials = 0
     flagConTrials = True
     trials = cantidadTrials * trialsAPromediar
-    moveDuration = 1 #secs #IMPORTANTE: trialDuration SIEMPRE debe ser MAYOR a stimuliDuration
-    restTime = 2
+    moveDuration = 1 
+    restTime = 4-moveDuration
 
     stimuliDuration = 4 #secs
 
