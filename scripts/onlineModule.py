@@ -122,13 +122,14 @@ def main():
     cantCanalesAUsar = 2 #Cantidad de canales a utilizar
     canalesAUsar = [1,2] #Seleccionamos canal uno y dos. NOTA: Si quisieramos elegir el canal 2 solamente debemos hacer [2,2] o [1,1] para elegir el canal 1
 
-    cantidadTrials = 4 #cantidad de trials. Sirve para la sesión de entrenamiento.
-    trialsAPromediar = 2
+    cantidadTrials = 10 #cantidad de trials. Sirve para la sesión de entrenamiento.
+    trialsAPromediar = 3
     contadorTrials = 0
     flagConTrials = True
     trials = cantidadTrials * trialsAPromediar
-    moveDuration = 1 
-    restTime = 4-moveDuration
+    moveDuration = 1 #seg. Tiempo de movimiento
+    restTime = 4-moveDuration 
+    restTime2 = 2-moveDuration
 
     stimuliDuration = 4 #secs
 
@@ -200,7 +201,7 @@ def main():
     BoardShim.enable_dev_board_logger()
     logging.basicConfig(level=logging.DEBUG)
     
-    puerto = "COM8" #Chequear el puerto al cual se conectará la placa
+    puerto = "COM5" #Chequear el puerto al cual se conectará la placa
     
     parser = argparse.ArgumentParser()
     
@@ -316,7 +317,7 @@ def main():
     ##########################################################################################"""
 
     #IMPORTANTE: Chequear en qué puerto esta conectado Arduino.
-    arduino = AC('COM5', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime,
+    arduino = AC('COM10', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
              timing = 100, ntrials = trials)
 
     time.sleep(1) 
