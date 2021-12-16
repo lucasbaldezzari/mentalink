@@ -265,7 +265,6 @@ class ArduinoCommunication:
             #self.trial += 1 #incrementamos un trial
             self.counter = 0 #reiniciamos timer
             
-            
         return self.trial
     
     def generalControl(self):
