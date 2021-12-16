@@ -252,18 +252,25 @@ class ArduinoCommunication:
             self.trial += 1 #incrementamos un trial}
         
         if ((self.counter == self.totalTime2) and ((self.trial % self.trialsPromediados) != 0)):
-            self.systemControl[1] = b"1"
+            if self.trial < self.trialsNumber: 
+                self.systemControl[1] = b"1"
+            else:
+                self.systemControl[0] = b"0"
             self.estadoRobot = self.sendMessage(self.systemControl)
             print(f"Fin trial {self.trial}")
             #self.trial += 1 #incrementamos un trial
-            self.counter = 0 #reiniciamos timer
+            self.counter = 0 #reiniciamos timer}
 
         if  ((self.counter == self.totalTime) and ((self.trial % self.trialsPromediados) == 0)):
-            self.systemControl[1] = b"1"
+            if self.trial < self.trialsNumber: 
+                self.systemControl[1] = b"1"
+            else:
+                self.systemControl[0] = b"0"
             self.estadoRobot = self.sendMessage(self.systemControl)
             print(f"Fin trial {self.trial}")
             #self.trial += 1 #incrementamos un trial
             self.counter = 0 #reiniciamos timer
+            
             
         return self.trial
     
@@ -312,7 +319,7 @@ def main():
     restTime = 4-moveDuration
 
     ard = ArduinoCommunication('COM10', moveDuration = moveDuration, stimONTime = stimONTime, restTime = restTime,
-                               timing = 100, ntrials = 20)
+                               timing = 100, ntrials = 2)
     time.sleep(1)
     ard.iniSesion()
 

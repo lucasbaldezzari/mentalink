@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../Documents/GitHub/mentalink/_documentación/Material audiovisual/Logo Mentalink.png</normaloff>../../Documents/GitHub/mentalink/_documentación/Material audiovisual/Logo Mentalink.png</iconset>
+    <normaloff>../_documentación/Material audiovisual/Logo Mentalink.png</normaloff>../_documentación/Material audiovisual/Logo Mentalink.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow{background-color: 
@@ -53,20 +53,20 @@ green;
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>70</y>
-      <width>241</width>
-      <height>271</height>
+      <x>410</x>
+      <y>80</y>
+      <width>391</width>
+      <height>261</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../Downloads/doge.jfif</pixmap>
+     <pixmap>C:/Users/Lucas/Downloads/dogepan.png</pixmap>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -132,13 +132,13 @@ green;
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>451</width>
-      <height>311</height>
+      <x>20</x>
+      <y>70</y>
+      <width>381</width>
+      <height>281</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">

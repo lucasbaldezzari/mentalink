@@ -13,7 +13,7 @@ int PWM2 = 150;
 
 char ledRojo = A0;
 char ledVerde = A5;
-char ledAzul = A1;
+char ledAzul = A2;
 
 int temporizador = 500; //para 100ms cFRENADOsiderando la frecuencia de interrupción del timer2
 int acum = 0;
@@ -43,7 +43,6 @@ int IN6 = 4;
 int IN7 = 12;
 int IN8 = 13;
 
-
 void setup() {
   noInterrupts();//Deshabilito todas las interrupciFRENADOes
   //Motores
@@ -62,7 +61,8 @@ void setup() {
   analogWrite (EN, 0); //motores parados
   BTone.begin(9600);
   Serial.begin(9600);
-
+  digitalWrite(ledVerde, HIGH);
+  digitalWrite(ledAzul, HIGH);
 
   iniTimer2();
   delay(1000);
@@ -97,12 +97,20 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
 {
   if (BTone.available())
   {
-    estado = !estado;
-    digitalWrite(ledVerde,estado);
+//    estado = !estado;
+//    digitalWrite(ledVerde,estado);
     Dt = BTone.read();    
     giveAnOrder();//damos una orden al vehículo
     //sendBTMessage();
-    Serial.write(BTone.read());   
+    Serial.write(BTone.read()); 
+//    if ((Dt & 0b00000001) == 0b00000000){
+//      digitalWrite(ledVerde, LOW);
+//      digitalWrite(ledAzul, LOW);
+//    }
+//    else{
+//      digitalWrite(ledVerde, HIGH);
+//      digitalWrite(ledAzul, HIGH);
+//    }
   }
 
   if (Serial.available())
@@ -136,7 +144,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2
       if (++acum > temporizador)
       {
         estado = !estado;
-        digitalWrite(ledAzul, estado);
+        //digitalWrite(ledAzul, estado);
         acum = 0;
       }
       break;
@@ -155,6 +163,7 @@ void Adelante()
   digitalWrite (IN6, LOW);
   digitalWrite (IN7, LOW); // atras der
   digitalWrite (IN8, HIGH); //HIGH
+  
 }
 
 void Retroceso()
@@ -214,7 +223,7 @@ void giveAnOrder()
   if ( ( (Dt >> 1) & 0b00000001) == 0 ) //Si los estímulos se apagarFRENADO, podemos mover.
   {
     flagMoviendo = MOVIENDO;
-    digitalWrite(ledAzul, 0);
+    //digitalWrite(ledAzul, 0);
     acum = 0;
     if ( ((Dt >> 2) & mascaraComando) == 1) Adelante();
     else if ( ((Dt >> 2) & mascaraComando) == 2) Izquierda();

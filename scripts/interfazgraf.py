@@ -38,7 +38,7 @@ class onlineModItz(QMainWindow):
         self.boton.clicked.connect(self.start)
 
     def start(self):
-        placa = self.placa.text()
+        placaBCI = self.placa.text()
         puertoBCI = self.bci.text()
         puerto = self.puerto.text()
         stimTime = int(self.stimTime.text())
@@ -48,15 +48,15 @@ class onlineModItz(QMainWindow):
         trials = int(self.trials.text())
         averageTrials = int(self.averageTrials.text())
         # self.dialogo.exec_()
-        self.main(placa, puertoBCI, puerto, stimTime, moveTime, restTime2, restTime, trials, averageTrials)     
+        self.main(placaBCI, puertoBCI, puerto, stimTime, moveTime, restTime2, restTime, trials, averageTrials)     
         
-    def main(self, placa, puertoBCI, puerto, stimTime, moveTime, restTime2, restTime, trials, averageTrials):
+    def main(self, placaBCI, puertoBCI, puerto, stimTime, moveTime, restTime2, restTime, trials, averageTrials):
 
         placas = {"cyton": BoardIds.CYTON_BOARD, #IMPORTANTE: frecuencia muestreo 256Hz
                 "ganglion": BoardIds.GANGLION_BOARD, #IMPORTANTE: frecuencia muestro 200Hz
                 "synthetic": BoardIds.SYNTHETIC_BOARD}
         
-        placa = placas[f"{placa}"]
+        placa = placas['ganglion']
         electrodos = "pasivos"
 
         cantCanalesAUsar = 2 #Cantidad de canales a utilizar
@@ -67,7 +67,7 @@ class onlineModItz(QMainWindow):
         contadorTrials = 0
         contadorTrials2  = 0
         flagConTrials = True
-        trials = cantidadTrials * trialsAPromediar
+        trialsTotales = cantidadTrials * trialsAPromediar
         moveDuration = moveTime #seg. Tiempo de movimiento
         restTime = restTime-moveDuration 
         restTime2 = restTime2-moveDuration
@@ -75,7 +75,7 @@ class onlineModItz(QMainWindow):
         stimuliDuration = stimTime #secs
 
         classifyData = True #True en caso de querer clasificar la señal de EEG
-        fm = BoardShim.get_sampling_rate(placa)    
+        fm = BoardShim.get_sampling_rate(placa)
         window = stimuliDuration #segundos
 
         equipo = "mentalink"
@@ -142,7 +142,7 @@ class onlineModItz(QMainWindow):
         BoardShim.enable_dev_board_logger()
         logging.basicConfig(level=logging.DEBUG)
         
-        puerto = puertoBCI #Chequear el puerto al cual se conectará la placa
+        puerto = 'COM5' #Chequear el puerto al cual se conectará la placa
         
         parser = argparse.ArgumentParser()
         
@@ -259,7 +259,7 @@ class onlineModItz(QMainWindow):
 
         #IMPORTANTE: Chequear en qué puerto esta conectado Arduino.
         arduino = AC('COM10', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
-                timing = 100, ntrials = trials)
+                timing = 100, ntrials = trialsTotales)
 
         time.sleep(1) 
         arduino.iniSesion() #Inicio sesión en el Arduino.
@@ -300,7 +300,6 @@ class onlineModItz(QMainWindow):
                     arduino.systemControl[2] = b'0' #cargamos movimiento STOP
                     self.process.setText(f'Estimulando')
                     classifyData = True
-                
             
         except BaseException as e:
             logging.warning('Exception', exc_info=True)

@@ -29,7 +29,7 @@ int LEDIz = 7; //led para prueba
 byte obstaculos = 0b00000000;
 int estado = 0;
 byte recepcion = 0b00000000;
-long int REINICIO = 1500000;
+long int REINICIO = 1000000;
 long int conteo2 = 0;
 //SoftwareSerial BTEsclavo(10,9); //RX, TX (1-10) (0-9) en Serial M3.1
 
@@ -101,7 +101,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
   //            Serial.println();
         //contador = 0;
         restTime = 'OFF'; //si se debe enviar el eco
-        if (d1 < 45) {
+        if (d1 < 60) {
           digitalWrite(LEDAd, 1);
           obstaculos = obstaculos | 0b00000001;
           Serial.write(obstaculos);
@@ -202,7 +202,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         //      Serial.println();
         contador = 0;
         restTime = 'OFF'; //si se debe enviar el eco
-        if (d4 < 45) {
+        if (d4 < 30) {
           digitalWrite(LEDIz, 1);
           obstaculos = obstaculos | 0b00000010;
           Serial.write(obstaculos);

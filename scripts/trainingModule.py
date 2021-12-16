@@ -48,15 +48,18 @@ def main():
 
     """Defino variables para control de Trials"""
     
-    trialsAPromediar = 3
-    contadorTrials = 0
-    cantidadTrials = 6 #cantidad de trials. Sirve para la sesión de entrenamiento.
-    trials = cantidadTrials * trialsAPromediar
-    #IMPORTANTE: trialDuration SIEMPRE debe ser MAYOR a stimuliDuration
+    cantidadTrials = 8 #cantidad de trials. Sirve para la sesión de entrenamiento. Subtrials
+    trialsAPromediar = 2
+    contadorTrials = 0 #INICIAR SIEMPRE EN CERO
+    flagConTrials = True
+    trials = cantidadTrials * trialsAPromediar #TRIALS TOTALES
+    moveDuration = 1 #seg. Tiempo de movimiento del vehículo
+    restTime = 4-moveDuration #tiempo de descanso luego del movimiento del vehículo.
+    ## IMPORTANTE: restTime debe ser mayor o igual a cero.
+    restTime2 = 2-moveDuration #IMPORTANTE: no mayor a moveDuration
 
-    trialDuration = 6 #secs
     stimuliDuration = 4 #secs
-
+    trialDuration = stimuliDuration + moveDuration + restTime
     saveData = True
     
     EEGdata = []
@@ -65,10 +68,10 @@ def main():
     path = "recordedEEG" #directorio donde se almacenan los registros de EEG.
 
     """Datos del sujeto, la sesión y la corrida"""
-    subject = "tomyS_s1_r2_11hz"
-    date = '14122021'
-    generalInformation = f'Ganglion. Estim 11Hz. Duración estímulos {stimuliDuration} y duración trial {trialDuration}'
-    stimFrec =  "11"
+    subject = "waltertwo_s6_r2_10hz"
+    date = '16122021'
+    generalInformation = f'Ganglion. Estim 10Hz. Duración estímulos {stimuliDuration} y duración trial {trialDuration}'
+    stimFrec =  "10"
     channelsRecorded = [1,2]
 
 
@@ -76,7 +79,7 @@ def main():
     PASO 2: Iniciamos comunicación con Arduino
     ##########################################################################################"""
     #IMPORTANTE: Chequear en qué puerto esta conectado Arduino.
-    arduino = AC('COM3', trialDuration = trialDuration, stimONTime = stimuliDuration,
+    arduino = AC('COM10', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
              timing = 100, ntrials = trials)
     time.sleep(1) 
     
