@@ -38,7 +38,7 @@ class ArduinoCommunication:
         -------
         Nada        
     """
-    def __init__(self, port, moveDuration = 1, stimONTime = 4, restTime = 2,
+    def __init__(self, port, moveDuration = 1, stimONTime = 4, restTime = 2, restTime2 = 1, trialsPromediados = 1,
                  timerFrecuency = 1000, timing = 1, useExternalTimer = False,
                  ntrials = 1):
         
@@ -49,11 +49,14 @@ class ArduinoCommunication:
         self.trialDuration =   self.moveDuration + self.stimONTime
         self.stimOFFTime = int((moveDuration+stimONTime) - stimONTime)/timing*timerFrecuency
         self.stimStatus = "on"
-        self.trial = 1
+        self.trial = 0
         self.trialsNumber = ntrials
         self.restTime = int((restTime*timerFrecuency)/timing)
         self.totalTime = self.trialDuration + self.restTime
-        
+        self.restTime2 = int((restTime2*timerFrecuency)/timing)
+        self.totalTime2 = self.trialDuration + self.restTime2
+        self.trialsPromediados = trialsPromediados
+
         self.movements = [b'0',b'1',b'2',b'3',b'4',b'5'] #lista con los compandos
         """
         movements:
@@ -211,7 +214,7 @@ class ArduinoCommunication:
 
         self.counter += 1
         
-        if self.counter == self.stimONTime: #mandamos nuevo mensaje cuando comienza un trial
+        if self.counter == self.stimONTime: #mandamos nuevo mensaje cuando termina de estimular
         
             self.systemControl[1] = b"0" #apagamos estímulos
             self.estadoRobot = self.sendMessage(self.systemControl)
@@ -228,7 +231,7 @@ class ArduinoCommunication:
             #time.sleep(self.restTime)
             #print(self.counter)
              
-        if self.counter == self.trialDuration: 
+        if self.counter == self.trialDuration: #termina de mover
             
             # self.systemControl[1] = b"1"
             self.systemControl[2] = b"0"
@@ -246,14 +249,21 @@ class ArduinoCommunication:
             # print(f"Fin trial {self.trial}")
             # self.trial += 1 #incrementamos un trial
             # self.counter = 0 #reiniciamos timer
-
-        if  self.counter == self.totalTime:
+            self.trial += 1 #incrementamos un trial}
+        
+        if ((self.counter == self.totalTime2) and ((self.trial % self.trialsPromediados) != 0)):
             self.systemControl[1] = b"1"
             self.estadoRobot = self.sendMessage(self.systemControl)
             print(f"Fin trial {self.trial}")
-            self.trial += 1 #incrementamos un trial
+            #self.trial += 1 #incrementamos un trial
             self.counter = 0 #reiniciamos timer
-            
+
+        if  ((self.counter == self.totalTime) and ((self.trial % self.trialsPromediados) == 0)):
+            self.systemControl[1] = b"1"
+            self.estadoRobot = self.sendMessage(self.systemControl)
+            print(f"Fin trial {self.trial}")
+            #self.trial += 1 #incrementamos un trial
+            self.counter = 0 #reiniciamos timer
             
         return self.trial
     
@@ -296,7 +306,12 @@ def main():
     #En el caso de querer ejecutar Trials de manera indeterminada,
     #debe hacerse trials = None (default)
     """
-    ard = ArduinoCommunication('COM5', moveDuration = 1, stimONTime = 4, restTime = 2,
+
+    moveDuration = 1
+    stimONTime = 4
+    restTime = 4-moveDuration
+
+    ard = ArduinoCommunication('COM10', moveDuration = moveDuration, stimONTime = stimONTime, restTime = restTime,
                                timing = 100, ntrials = 20)
     time.sleep(1)
     ard.iniSesion()

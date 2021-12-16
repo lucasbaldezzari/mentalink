@@ -2,7 +2,7 @@
 """
 Created on Wed Sep 16 2021
 
-@author: Lucas Baldezzari
+@authorS: Lucas Baldezzari - Álvarez Emiliano - Mar Walter
 
 Módulo para adquirir, procesar y clasificar señales de EEG en busca de SSVEPs para obtener un comando
 
@@ -122,13 +122,15 @@ def main():
     cantCanalesAUsar = 2 #Cantidad de canales a utilizar
     canalesAUsar = [1,2] #Seleccionamos canal uno y dos. NOTA: Si quisieramos elegir el canal 2 solamente debemos hacer [2,2] o [1,1] para elegir el canal 1
 
-    cantidadTrials = 4 #cantidad de trials. Sirve para la sesión de entrenamiento.
+    cantidadTrials = 2 #cantidad de trials. Sirve para la sesión de entrenamiento. Subtrials
     trialsAPromediar = 2
-    contadorTrials = 0
+    contadorTrials = 0 #INICIAR SIEMPRE EN CERO
     flagConTrials = True
-    trials = cantidadTrials * trialsAPromediar
-    moveDuration = 1 #secs #IMPORTANTE: trialDuration SIEMPRE debe ser MAYOR a stimuliDuration
-    restTime = 2
+    trials = cantidadTrials * trialsAPromediar #TRIALS TOTALES
+    moveDuration = 0.5 #seg. Tiempo de movimiento del vehículo
+    restTime = 4-moveDuration #tiempo de descanso luego del movimiento del vehículo.
+    ## IMPORTANTE: restTime debe ser mayor o igual a cero.
+    restTime2 = 2-moveDuration #IMPORTANTE: no mayor a moveDuration
 
     stimuliDuration = 4 #secs
 
@@ -200,7 +202,7 @@ def main():
     BoardShim.enable_dev_board_logger()
     logging.basicConfig(level=logging.DEBUG)
     
-    puerto = "COM8" #Chequear el puerto al cual se conectará la placa
+    puerto = "COM5" #Chequear el puerto al cual se conectará la placa
     
     parser = argparse.ArgumentParser()
     
@@ -316,7 +318,7 @@ def main():
     ##########################################################################################"""
 
     #IMPORTANTE: Chequear en qué puerto esta conectado Arduino.
-    arduino = AC('COM5', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime,
+    arduino = AC('COM10', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
              timing = 100, ntrials = trials)
 
     time.sleep(1) 
