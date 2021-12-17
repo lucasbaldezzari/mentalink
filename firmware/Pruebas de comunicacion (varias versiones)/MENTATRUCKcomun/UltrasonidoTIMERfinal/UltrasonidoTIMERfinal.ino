@@ -170,8 +170,8 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         restTime = 'OFF'; //si se debe enviar el eco
         if (d3 < 45) {
           digitalWrite(LEDDer, 1);
-          obstaculos = obstaculos | 0b00000100;
-          Serial.write(obstaculos);
+//          obstaculos = obstaculos | 0b00000100;
+//          Serial.write(obstaculos);
         }
   //      if (d3 < 30) {
   //        digitalWrite(LEDDer, 1);
@@ -204,8 +204,8 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         restTime = 'OFF'; //si se debe enviar el eco
         if (d4 < 30) {
           digitalWrite(LEDIz, 1);
-          obstaculos = obstaculos | 0b00000010;
-          Serial.write(obstaculos);
+//          obstaculos = obstaculos | 0b00000010;
+//          Serial.write(obstaculos);
             }
   //      if (d4 < 30) {
   //        digitalWrite(LEDIz, 1);

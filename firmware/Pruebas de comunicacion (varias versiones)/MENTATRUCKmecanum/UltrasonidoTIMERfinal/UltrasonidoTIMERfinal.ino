@@ -135,7 +135,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         //      Serial.println();
         //contador = 0; //reinicio el contador para que al finalizar este if comience a contar 50ms
         restTime = 'OFF'; //si se debe enviar el eco
-        if (d2 < 45) {
+        if (d2 < 60) {
           digitalWrite(LEDAt, 1);
           obstaculos = obstaculos | 0b00001000;
           Serial.write(obstaculos);
@@ -168,7 +168,7 @@ ISR(TIMER2_COMPA_vect)//Rutina interrupción Timer2, configurado a 10us
         //      Serial.println();
         //contador = 0;
         restTime = 'OFF'; //si se debe enviar el eco
-        if (d3 < 45) {
+        if (d3 < 30) {
           digitalWrite(LEDDer, 1);
           obstaculos = obstaculos | 0b00000100;
           Serial.write(obstaculos);

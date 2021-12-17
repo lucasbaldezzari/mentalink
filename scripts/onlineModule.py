@@ -122,12 +122,12 @@ def main():
     cantCanalesAUsar = 2 #Cantidad de canales a utilizar
     canalesAUsar = [1,2] #Seleccionamos canal uno y dos. NOTA: Si quisieramos elegir el canal 2 solamente debemos hacer [2,2] o [1,1] para elegir el canal 1
 
-    cantidadTrials = 1 #cantidad de trials. Sirve para la sesión de entrenamiento. Subtrials
+    cantidadTrials = 4 #cantidad de trials. Sirve para la sesión de entrenamiento. Subtrials
     trialsAPromediar = 2
     contadorTrials = 0 #INICIAR SIEMPRE EN CERO
     flagConTrials = True
     trials = cantidadTrials * trialsAPromediar #TRIALS TOTALES
-    moveDuration = 1 #seg. Tiempo de movimiento del vehículo
+    moveDuration = 2 #seg. Tiempo de movimiento del vehículo
     restTime = 4-moveDuration #tiempo de descanso luego del movimiento del vehículo.
     ## IMPORTANTE: restTime debe ser mayor o igual a cero.
     restTime2 = 2-moveDuration #IMPORTANTE: no mayor a moveDuration
