@@ -53,12 +53,12 @@ samplePoints = int(fm*duration)
 channels = 2
 
 subjects = [1]
-filenames = ["waltertwo_s6_r2_10hz"]
+filenames = ["walter_s2_r1_7hz"]
 allData = fa.loadData(path = path, filenames = filenames)
 
-name = "waltertwo_s6_r2_10hz" #nombre de los datos a analizar}
+name = "walter_s2_r1_7hz" #nombre de los datos a analizar}
 stimuli = [7,8.5,10] #lista de estímulos
-estim = [10] #L7e pasamos un estímulo para que grafique una linea vertical
+estim = [7] #L7e pasamos un estímulo para que grafique una linea vertical
 
 frecStimulus = np.array([7,8.5,10])
 
@@ -129,7 +129,7 @@ trial = 2
 ###
 
 if plotFilteredEEGs == True:
-    title = f"Señales EEG por canal - Trial {trial}"
+    title = f"Señales EEG por canal - Trial {trial} - Frec {estim[0]}Hz"
     subtitles = ["O1 y O2 promediados", "O1", "O2"]
     fig, plots = plt.subplots(1, 3, figsize=(12, 6), gridspec_kw=dict(hspace=0.45, wspace=0.3))
     fig.suptitle(title, fontsize = 12)
@@ -187,7 +187,7 @@ samplesFrec = [signalSampleFrec1, signalSampleFrec2, signalSampleFrec3]
 signalPSDs = [O1O2PSD1, O1PSD2, O2PSD3]
 
 if plotWelchPSD == True:
-    title = f"PSD para Welch - Trial {trial} - Datos sin banquear"
+    title = f"PSD para Welch - Trial {trial} - Datos sin banquear - Frec {estim[0]}Hz"
     subtitles = ["O1 y O2 promediados", "O1", "O2"]
     fig, plots = plt.subplots(1, 3, figsize=(12, 6), gridspec_kw=dict(hspace=0.45, wspace=0.3))
     fig.suptitle(title, fontsize = 12)

@@ -68,8 +68,8 @@ def main():
     path = "recordedEEG" #directorio donde se almacenan los registros de EEG.
 
     """Datos del sujeto, la sesión y la corrida"""
-    subject = "waltertwo_s6_r2_10hz"
-    date = '16122021'
+    subject = "waltertwo_s7_r1_10hz"
+    date = '17122021'
     generalInformation = f'Ganglion. Estim 10Hz. Duración estímulos {stimuliDuration} y duración trial {trialDuration}'
     stimFrec =  "10"
     channelsRecorded = [1,2]

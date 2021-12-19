@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>787</width>
-    <height>522</height>
+    <width>905</width>
+    <height>681</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,10 +29,10 @@ green;
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>0</y>
-      <width>231</width>
-      <height>51</height>
+      <x>310</x>
+      <y>10</y>
+      <width>391</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
@@ -44,56 +44,38 @@ green;
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel#label{background-color:red;}</string>
+     <string notr="true">QLabel#label{background-color:green;}</string>
     </property>
     <property name="text">
-     <string>Módulo Online</string>
+     <string>Módulo Online Mentalink</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>80</y>
-      <width>391</width>
-      <height>261</height>
+      <x>580</x>
+      <y>110</y>
+      <width>351</width>
+      <height>221</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>C:/Users/Lucas/Downloads/dogepan.png</pixmap>
+     <pixmap>C:/Users/Lucas/Downloads/dogesito.jpg</pixmap>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>390</y>
-      <width>771</width>
-      <height>95</height>
+      <x>30</x>
+      <y>470</y>
+      <width>451</width>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="1" column="0">
-      <widget class="QLabel" name="trialCounter">
-       <property name="font">
-        <font>
-         <family>Comic Sans MS</family>
-         <pointsize>14</pointsize>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Trials: 0</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="obstaculos">
        <property name="font">
@@ -104,8 +86,32 @@ green;
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel#obstaculos{ background-color: gray }</string>
+       </property>
        <property name="text">
         <string>Obstaculos: 0000</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="trialCounter">
+       <property name="font">
+        <font>
+         <family>Comic Sans MS</family>
+         <pointsize>14</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel#trialCounter{ background-color: gray;}</string>
+       </property>
+       <property name="text">
+        <string>Trials: 0</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,6 +128,9 @@ green;
          <bold>true</bold>
         </font>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel#process{ background-color: gray }</string>
+       </property>
        <property name="text">
         <string>No iniciado</string>
        </property>
@@ -135,10 +144,10 @@ green;
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>70</y>
-      <width>381</width>
-      <height>281</height>
+      <x>30</x>
+      <y>80</y>
+      <width>451</width>
+      <height>361</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
@@ -179,10 +188,90 @@ green;
            </property>
           </widget>
          </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="restTime2">
+           <property name="text">
+            <string>4</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Tiempo de movimiento:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="moveTime">
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="puerto">
+           <property name="text">
+            <string>COM10</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="label_8">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Trials:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Tiempo de descanso trials:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="restTime">
+           <property name="text">
+            <string>2</string>
+           </property>
+          </widget>
+         </item>
          <item row="8" column="1">
           <widget class="QLineEdit" name="averageTrials">
            <property name="text">
             <string>2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Trials a promediar:</string>
            </property>
           </widget>
          </item>
@@ -212,97 +301,10 @@ green;
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="puerto">
-           <property name="text">
-            <string>COM8</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="font">
-            <font>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Tiempo de movimiento:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="font">
-            <font>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Tiempo de descanso trials:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="moveTime">
-           <property name="text">
-            <string>1</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="font">
-            <font>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Trials a promediar:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="stimTime">
-           <property name="text">
-            <string>4</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLineEdit" name="restTime">
-           <property name="text">
-            <string>2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_8">
-           <property name="font">
-            <font>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Trials:</string>
-           </property>
-          </widget>
-         </item>
          <item row="7" column="1">
           <widget class="QLineEdit" name="trials">
            <property name="text">
-            <string>18</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="restTime2">
-           <property name="text">
-            <string>4</string>
+            <string>1</string>
            </property>
           </widget>
          </item>
@@ -316,6 +318,13 @@ green;
            </property>
            <property name="text">
             <string>Puerto Placa BCI:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="stimTime">
+           <property name="text">
+            <string>4</string>
            </property>
           </widget>
          </item>
@@ -350,13 +359,29 @@ green;
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>410</y>
+      <width>211</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>C:/Users/Lucas/Downloads/Webp.net-resizeimage (2).png</pixmap>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>787</width>
+     <width>905</width>
      <height>21</height>
     </rect>
    </property>
