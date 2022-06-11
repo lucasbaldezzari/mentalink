@@ -19,7 +19,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 
 import brainflow
 from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds, BrainFlowError
-from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, WindowFunctions, DetrendOperations
+from brainflow.data_filter import DataFilter, FilterTypes, AggOperations, DetrendOperations
 
 import threading
 

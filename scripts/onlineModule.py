@@ -202,7 +202,7 @@ def main():
     BoardShim.enable_dev_board_logger()
     logging.basicConfig(level=logging.DEBUG)
     
-    puerto = "COM5" #Chequear el puerto al cual se conectará la placa
+    puerto = "COM15" #Chequear el puerto al cual se conectará la placa
     
     parser = argparse.ArgumentParser()
     
@@ -318,7 +318,7 @@ def main():
     ##########################################################################################"""
 
     #IMPORTANTE: Chequear en qué puerto esta conectado Arduino.
-    arduino = AC('COM10', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
+    arduino = AC('COM8', moveDuration = moveDuration, stimONTime = stimuliDuration, restTime = restTime, trialsPromediados = trialsAPromediar, restTime2 = restTime2,
              timing = 100, ntrials = trials)
 
     time.sleep(1) 

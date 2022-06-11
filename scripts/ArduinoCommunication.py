@@ -119,9 +119,7 @@ class ArduinoCommunication:
         ----------
         message (byte):
             Byte que se desa enviar por puerto serie.
-
         Cada vez que se envía un byte con write, se recibe un byte desde Arduino.
-
         El orden de los byte es:
         - Byte1: obstaculo adelante (1-Obstaculo /0-sin obstaculo)
         - Byte2: obstaculo izquierda (1-Obstaculo /0-sin obstaculo)
@@ -318,7 +316,7 @@ def main():
     stimONTime = 4
     restTime = 4-moveDuration
 
-    ard = ArduinoCommunication('COM10', moveDuration = moveDuration, stimONTime = stimONTime, restTime = restTime,
+    ard = ArduinoCommunication('COM8', moveDuration = moveDuration, stimONTime = stimONTime, restTime = restTime,
                                timing = 100, ntrials = 1)
     time.sleep(1)
     ard.iniSesion()
